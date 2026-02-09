@@ -18,7 +18,11 @@ export function Header() {
       <Container>
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="text-2xl font-semibold text-neutral-900 tracking-wide">
+          <Link
+            href="/"
+            className="text-2xl font-bold tracking-wide"
+            style={{ color: '#8d7336' }}
+          >
             {siteConfig.name}
           </Link>
 
