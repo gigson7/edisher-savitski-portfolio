@@ -34,7 +34,7 @@ export function Footer() {
           <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
             {/* Social Media */}
             <div>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+              <h3 className="text-xl font-semibold text-neutral-900 mb-4">
                 Follow
               </h3>
               <div className="flex gap-4">
@@ -58,12 +58,12 @@ export function Footer() {
 
             {/* Contact */}
             <div>
-              <h3 className="text-lg font-semibold text-neutral-900 mb-4">
+              <h3 className="text-xl font-semibold text-neutral-900 mb-4">
                 Contact
               </h3>
               <div className="space-y-3">
                 {siteConfig.contact.email && (
-                  <p className="text-sm text-neutral-600">
+                  <p className="text-lg text-neutral-600">
                     <a
                       href={`mailto:${siteConfig.contact.email}`}
                       className="hover:text-gold-600 transition-colors"
@@ -75,7 +75,7 @@ export function Footer() {
                 <p>
                   <Link
                     href="/contact"
-                    className="inline-flex items-center text-sm font-medium text-gold-600 hover:text-gold-700 transition-colors"
+                    className="inline-flex items-center text-lg font-medium text-gold-600 hover:text-gold-700 transition-colors"
                   >
                     Send a Message →
                   </Link>
@@ -85,7 +85,7 @@ export function Footer() {
           </div>
 
           <div className="mt-12 pt-8 border-t border-neutral-300">
-            <p className="text-center text-sm text-neutral-600">
+            <p className="text-center text-lg text-neutral-600">
               © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
             </p>
           </div>

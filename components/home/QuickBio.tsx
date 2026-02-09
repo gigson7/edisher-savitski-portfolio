@@ -38,10 +38,10 @@ export function QuickBio() {
             <h2 className="text-4xl sm:text-5xl font-semibold text-neutral-900 mb-8">
               About Dr. Savitski
             </h2>
-            <p className="text-lg text-neutral-700 mb-6 leading-relaxed">
+            <p className="text-xl text-neutral-700 mb-6 leading-relaxed">
               {biography.shortBio}
             </p>
-            <p className="text-base text-neutral-600 mb-10 leading-relaxed">
+            <p className="text-xl text-neutral-600 mb-10 leading-relaxed">
               Award-winning pianist performing at prestigious venues worldwide including
               Carnegie Hall, Wigmore Hall, and Teatro alla Scala. As a clinician he regularly
               conducts master classes throughout USA, Europe and China. His performances have
@@ -66,7 +66,7 @@ export function QuickBio() {
                   <h3 className="font-semibold text-neutral-900 mb-2">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-neutral-600 leading-relaxed">{item.description}</p>
+                  <p className="text-lg text-neutral-600 leading-relaxed">{item.description}</p>
                 </div>
               );
             })}

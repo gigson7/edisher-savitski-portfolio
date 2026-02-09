@@ -27,39 +27,23 @@ export function FeaturedPerformances() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
           {displayPerformances.map((performance) => (
             <Card key={performance.id} hover className="flex flex-col h-full">
-              <div className="mb-5">
-                <span
-                  className={`inline-block px-4 py-1.5 rounded text-xs font-medium border ${
-                    performance.type === "solo"
-                      ? "border-gold-500 text-gold-700"
-                      : performance.type === "chamber"
-                      ? "border-neutral-400 text-neutral-700"
-                      : performance.type === "orchestra"
-                      ? "border-neutral-500 text-neutral-800"
-                      : "border-neutral-400 text-neutral-700"
-                  }`}
-                >
-                  {performance.type.charAt(0).toUpperCase() + performance.type.slice(1)}
-                </span>
-              </div>
-
               <h3 className="text-xl font-semibold text-neutral-900 mb-4">
                 {performance.title}
               </h3>
 
               <div className="space-y-3 mb-4 flex-grow">
-                <div className="flex items-start gap-2 text-sm text-neutral-600">
+                <div className="flex items-start gap-2 text-lg text-neutral-600">
                   <Calendar className="w-4 h-4 mt-0.5 flex-shrink-0 text-gold-600" />
                   <span>{formatDateShort(performance.date)}</span>
                 </div>
-                <div className="flex items-start gap-2 text-sm text-neutral-600">
+                <div className="flex items-start gap-2 text-lg text-neutral-600">
                   <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gold-600" />
                   <span>
                     {performance.venue}, {performance.location}
                   </span>
                 </div>
                 {performance.organization && (
-                  <div className="flex items-start gap-2 text-sm text-neutral-600">
+                  <div className="flex items-start gap-2 text-lg text-neutral-600">
                     <Music className="w-4 h-4 mt-0.5 flex-shrink-0 text-gold-600" />
                     <span>{performance.organization}</span>
                   </div>

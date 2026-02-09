@@ -17,7 +17,7 @@ export function Navigation() {
             key={item.href}
             href={item.href}
             className={cn(
-              "text-base font-medium transition-colors hover:text-gold-600",
+              "text-lg font-medium transition-colors hover:text-gold-600",
               isActive
                 ? "text-gold-600"
                 : "text-neutral-700"

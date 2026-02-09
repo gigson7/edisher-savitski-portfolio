@@ -17,7 +17,7 @@ export function Section({
     <section
       id={id}
       className={cn(
-        "py-20 sm:py-28 lg:py-32",
+        "py-16 sm:py-20 lg:py-24",
         background === "white" ? "bg-neutral-50" : "bg-neutral-100",
         className
       )}

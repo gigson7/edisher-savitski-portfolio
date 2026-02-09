@@ -10,36 +10,23 @@ interface EventCardProps {
 export function EventCard({ performance }: EventCardProps) {
   return (
     <Card hover className="flex flex-col h-full">
-      <div className="flex items-center justify-between mb-5">
-        <span
-          className={`inline-block px-4 py-1.5 rounded text-xs font-medium border ${
-            performance.type === "solo"
-              ? "border-gold-500 text-gold-700"
-              : performance.type === "chamber"
-              ? "border-neutral-400 text-neutral-700"
-              : performance.type === "orchestra"
-              ? "border-neutral-500 text-neutral-800"
-              : "border-neutral-400 text-neutral-700"
-          }`}
-        >
-          {performance.type.charAt(0).toUpperCase() + performance.type.slice(1)}
-        </span>
-        {!performance.isPast && (
+      {!performance.isPast && (
+        <div className="mb-5">
           <span className="text-xs font-medium text-gold-600 px-3 py-1 border border-gold-400 rounded">Upcoming</span>
-        )}
-      </div>
+        </div>
+      )}
 
       <h3 className="text-lg font-semibold text-neutral-900 mb-4">
         {performance.title}
       </h3>
 
       <div className="space-y-3 flex-grow">
-        <div className="flex items-start gap-2 text-sm text-neutral-600">
+        <div className="flex items-start gap-2 text-lg text-neutral-600">
           <Calendar className="w-4 h-4 mt-0.5 flex-shrink-0 text-gold-600" />
           <span>{formatDateShort(performance.date)}</span>
         </div>
 
-        <div className="flex items-start gap-2 text-sm text-neutral-600">
+        <div className="flex items-start gap-2 text-lg text-neutral-600">
           <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0 text-gold-600" />
           <span>
             {performance.venue}
@@ -48,14 +35,14 @@ export function EventCard({ performance }: EventCardProps) {
         </div>
 
         {performance.organization && (
-          <div className="flex items-start gap-2 text-sm text-neutral-600">
+          <div className="flex items-start gap-2 text-lg text-neutral-600">
             <Music className="w-4 h-4 mt-0.5 flex-shrink-0 text-gold-600" />
             <span>{performance.organization}</span>
           </div>
         )}
 
         {performance.collaborators && performance.collaborators.length > 0 && (
-          <div className="flex items-start gap-2 text-sm text-neutral-600">
+          <div className="flex items-start gap-2 text-lg text-neutral-600">
             <Users className="w-4 h-4 mt-0.5 flex-shrink-0 text-gold-600" />
             <span>{performance.collaborators.join(", ")}</span>
           </div>
@@ -64,7 +51,7 @@ export function EventCard({ performance }: EventCardProps) {
         {performance.repertoire && performance.repertoire.length > 0 && (
           <div className="mt-4 pt-4 border-t border-neutral-200">
             <p className="text-xs text-neutral-500 mb-1 uppercase tracking-wide">Repertoire:</p>
-            <p className="text-sm text-neutral-600">
+            <p className="text-lg text-neutral-600">
               {performance.repertoire.join(", ")}
             </p>
           </div>

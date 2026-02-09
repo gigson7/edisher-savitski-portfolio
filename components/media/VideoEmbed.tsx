@@ -18,17 +18,9 @@ export function VideoEmbed({ video, showDescription = true }: VideoEmbedProps) {
         />
       </div>
       <div>
-        <h3 className="font-semibold text-neutral-900 mb-1">
+        <h3 className="text-lg font-semibold text-neutral-900">
           {video.title}
         </h3>
-        {showDescription && video.description && (
-          <p className="text-sm text-neutral-600">{video.description}</p>
-        )}
-        {showDescription && video.repertoire && video.repertoire.length > 0 && (
-          <p className="text-sm text-neutral-500 mt-2">
-            {video.repertoire.join(", ")}
-          </p>
-        )}
       </div>
     </div>
   );

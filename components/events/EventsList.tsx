@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Performance, PerformanceType } from "@/types";
+import { Performance } from "@/types";
 import { EventCard } from "./EventCard";
 import { getYear } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
@@ -14,7 +14,6 @@ interface EventsListProps {
 const ITEMS_PER_PAGE = 21;
 
 export function EventsList({ performances, title }: EventsListProps) {
-  const [selectedType, setSelectedType] = useState<PerformanceType | "all">("all");
   const [selectedYear, setSelectedYear] = useState<number | "all">("all");
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
 
@@ -25,9 +24,8 @@ export function EventsList({ performances, title }: EventsListProps) {
 
   // Filter performances
   const filteredPerformances = performances.filter((p) => {
-    const typeMatch = selectedType === "all" || p.type === selectedType;
     const yearMatch = selectedYear === "all" || getYear(p.date) === selectedYear;
-    return typeMatch && yearMatch;
+    return yearMatch;
   });
 
   // Reset display count when filters change
@@ -53,27 +51,6 @@ export function EventsList({ performances, title }: EventsListProps) {
 
         {/* Filters */}
         <div className="flex flex-col sm:flex-row gap-4">
-          <div>
-            <label className="block text-sm font-medium text-primary-700 mb-2">
-              Type
-            </label>
-            <select
-              value={selectedType}
-              onChange={(e) =>
-                handleFilterChange(() =>
-                  setSelectedType(e.target.value as PerformanceType | "all")
-                )
-              }
-              className="px-4 py-2 border border-primary-300 rounded-md text-primary-700 focus:outline-none focus:ring-2 focus:ring-accent-500"
-            >
-              <option value="all">All Types</option>
-              <option value="solo">Solo</option>
-              <option value="chamber">Chamber</option>
-              <option value="orchestra">Orchestra</option>
-              <option value="masterclass">Masterclass</option>
-            </select>
-          </div>
-
           <div>
             <label className="block text-sm font-medium text-primary-700 mb-2">
               Year
