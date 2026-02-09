@@ -18,7 +18,7 @@ In November 2007, Dr. Savitski became first pianist who performed in an unpreced
     {
       id: "overview",
       title: "Overview",
-      content: `Pianist Edisher Savitski is an Associate Professor at the University of Alabama School of Music and an Artistic Director of Toradze International Music Festival. As a clinician he regularly conducts master classes throughout USA, Europe and China.
+      content: `As a clinician he regularly conducts master classes throughout USA, Europe and China. His performances have been praised by critics worldwide and broadcasted on live TV and radio throughout Europe and USA.
 
 He has enjoyed critical acclaim throughout his career from prestigious publications worldwide.`,
       order: 1,
