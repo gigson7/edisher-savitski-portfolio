@@ -1,0 +1,17 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Dark background -->
+  <rect width="512" height="512" rx="96" fill="#1a1a1a"/>
+
+  <!-- Piano keys group - centered and simplified for clarity at small sizes -->
+  <!-- White keys -->
+  <rect x="140" y="180" width="70" height="180" rx="6" fill="#ffffff"/>
+  <rect x="220" y="180" width="70" height="180" rx="6" fill="#ffffff"/>
+  <rect x="300" y="180" width="70" height="180" rx="6" fill="#ffffff"/>
+
+  <!-- Black keys (shorter, positioned on top) -->
+  <rect x="195" y="180" width="40" height="110" rx="4" fill="#000000"/>
+  <rect x="275" y="180" width="40" height="110" rx="4" fill="#000000"/>
+
+  <!-- Gold accent border -->
+  <rect width="512" height="512" rx="96" fill="none" stroke="#8d7336" stroke-width="16"/>
+</svg>
