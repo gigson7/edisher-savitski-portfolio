@@ -26,13 +26,9 @@ export function HeroSection() {
       {/* Overlay Content */}
       <div className="relative h-full flex items-center">
         <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 w-full">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl pt-[30px]">
             <p className="text-2xl sm:text-3xl text-gold-200 mb-10 font-light tracking-wide">
               Concert Pianist • Associate Professor • Artistic Director
-            </p>
-            <p className="text-lg sm:text-xl text-white/90 mb-12 max-w-2xl leading-relaxed">
-              Award-winning pianist performing at prestigious venues worldwide including
-              Carnegie Hall, Wigmore Hall, and Teatro alla Scala
             </p>
             <div className="flex flex-col sm:flex-row gap-5">
               <Link href="/events">

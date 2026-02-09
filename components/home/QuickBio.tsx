@@ -42,9 +42,11 @@ export function QuickBio() {
               {biography.shortBio}
             </p>
             <p className="text-base text-neutral-600 mb-10 leading-relaxed">
-              As a clinician he regularly conducts master classes throughout USA, Europe
-              and China. His performances have been praised by critics worldwide and
-              broadcasted on live TV and radio throughout Europe and USA.
+              Award-winning pianist performing at prestigious venues worldwide including
+              Carnegie Hall, Wigmore Hall, and Teatro alla Scala. As a clinician he regularly
+              conducts master classes throughout USA, Europe and China. His performances have
+              been praised by critics worldwide and broadcasted on live TV and radio throughout
+              Europe and USA.
             </p>
             <Link href="/about">
               <Button variant="primary" size="lg">Read Full Biography</Button>
