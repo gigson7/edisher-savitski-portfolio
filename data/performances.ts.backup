@@ -1,0 +1,251 @@
+import { Performance } from "@/types";
+import { isPastDate } from "@/lib/utils";
+
+export const performances: Performance[] = [
+  {
+    id: "perf-2025-12-25",
+    date: "2025-12-25",
+    type: "orchestra",
+    title: "Soloist with Tbilisi Youth Orchestra",
+    venue: "Concert Hall",
+    location: "Tbilisi",
+    country: "Georgia",
+    organization: "Tbilisi Youth Orchestra",
+    isPast: isPastDate("2025-12-25"),
+    isFeatured: true,
+  },
+  {
+    id: "perf-2025-12-16",
+    date: "2025-12-16",
+    type: "orchestra",
+    title: "Soloist with Bishkek City Orchestra",
+    venue: "Concert Hall",
+    location: "Bishkek",
+    country: "Kyrgyzstan",
+    organization: "Bishkek City Orchestra",
+    isPast: isPastDate("2025-12-16"),
+  },
+  {
+    id: "perf-2025-12-12",
+    date: "2025-12-12",
+    type: "orchestra",
+    title: "Soloist with Uzbekistan National Orchestra",
+    venue: "Concert Hall",
+    location: "Tashkent",
+    country: "Uzbekistan",
+    organization: "Uzbekistan National Orchestra",
+    isPast: isPastDate("2025-12-12"),
+  },
+  {
+    id: "perf-2025-11-05",
+    date: "2025-11-05",
+    type: "solo",
+    title: "Studio Recital",
+    venue: "Recital Hall",
+    location: "Tuscaloosa, AL",
+    country: "USA",
+    organization: "University of Alabama",
+    isPast: isPastDate("2025-11-05"),
+  },
+  {
+    id: "perf-2025-06-13",
+    date: "2025-06-13",
+    type: "chamber",
+    title: "Chamber Concert",
+    venue: "Toradze International Music Festival",
+    location: "Tbilisi",
+    country: "Georgia",
+    organization: "Toradze International Music Festival",
+    isPast: isPastDate("2025-06-13"),
+    isFeatured: true,
+  },
+  {
+    id: "perf-2025-04-15",
+    date: "2025-04-15",
+    type: "solo",
+    title: "Solo Recital",
+    venue: "Yamaha Artist Services",
+    location: "New York, NY",
+    country: "USA",
+    organization: "Yamaha Artist Services",
+    isPast: isPastDate("2025-04-15"),
+    isFeatured: true,
+  },
+  {
+    id: "perf-2025-04-09",
+    date: "2025-04-09",
+    type: "solo",
+    title: "Solo Recital",
+    venue: "Roberts Hall",
+    location: "Huntsville, AL",
+    country: "USA",
+    organization: "University of Alabama Huntsville",
+    isPast: isPastDate("2025-04-09"),
+  },
+  {
+    id: "perf-2025-03-28",
+    date: "2025-03-28",
+    type: "solo",
+    title: "Solo Recital",
+    venue: "Moody Concert Hall",
+    location: "Tuscaloosa, AL",
+    country: "USA",
+    organization: "University of Alabama",
+    isPast: isPastDate("2025-03-28"),
+  },
+  {
+    id: "perf-2025-03-06",
+    date: "2025-03-06",
+    type: "chamber",
+    title: "Chamber and Solo Performance",
+    venue: "Concert Hall",
+    location: "Havana",
+    country: "Cuba",
+    isPast: isPastDate("2025-03-06"),
+  },
+  {
+    id: "perf-2024-10-23",
+    date: "2024-10-23",
+    type: "chamber",
+    title: "Chamber Recital with UA cellist Dr. Moises Molina",
+    venue: "Moody Concert Hall",
+    location: "Tuscaloosa, AL",
+    country: "USA",
+    organization: "University of Alabama",
+    collaborators: ["Dr. Moises Molina"],
+    isPast: true,
+  },
+  {
+    id: "perf-2024-07-09",
+    date: "2024-07-09",
+    type: "masterclass",
+    title: "Performances and Masterclasses",
+    venue: "Northern Lights Music Festival",
+    location: "Minnesota",
+    country: "USA",
+    organization: "Northern Lights Music Festival",
+    isPast: true,
+  },
+  {
+    id: "perf-2024-06-12",
+    date: "2024-06-12",
+    type: "solo",
+    title: "Performance with Gabriel Prokofiev",
+    venue: "Main Stage of Rustaveli National Theatre",
+    location: "Tbilisi",
+    country: "Georgia",
+    collaborators: ["Gabriel Prokofiev"],
+    isPast: true,
+    isFeatured: true,
+  },
+  {
+    id: "perf-2024-06-09",
+    date: "2024-06-09",
+    type: "solo",
+    title: "Rachmaninoff Marathon",
+    venue: "Grand Hall, Tbilisi State Conservatory",
+    location: "Tbilisi",
+    country: "Georgia",
+    repertoire: ["Rachmaninoff"],
+    isPast: true,
+  },
+  {
+    id: "perf-2024-06-07",
+    date: "2024-06-07",
+    type: "masterclass",
+    title: "Performances and Masterclasses",
+    venue: "Toradze International Music Festival",
+    location: "Tbilisi",
+    country: "Georgia",
+    organization: "Toradze International Music Festival",
+    isPast: true,
+  },
+  {
+    id: "perf-2024-02-11",
+    date: "2024-02-11",
+    type: "chamber",
+    title: "Trout Quintet",
+    venue: "Moody Concert Hall",
+    location: "Tuscaloosa, AL",
+    country: "USA",
+    organization: "University of Alabama",
+    repertoire: ["Schubert - Trout Quintet"],
+    isPast: true,
+  },
+  {
+    id: "perf-2023-12-09",
+    date: "2023-12-09",
+    type: "solo",
+    title: "Solo Recital",
+    venue: "Grand Hall, Tbilisi State Conservatory",
+    location: "Tbilisi",
+    country: "Georgia",
+    isPast: true,
+  },
+  {
+    id: "perf-2023-11-28",
+    date: "2023-11-28",
+    type: "solo",
+    title: "Solo Recital",
+    venue: "Yamaha Artist Services",
+    location: "New York, NY",
+    country: "USA",
+    organization: "Yamaha Artist Services",
+    isPast: true,
+  },
+  {
+    id: "perf-2023-11-07",
+    date: "2023-11-07",
+    type: "solo",
+    title: "Solo Recital",
+    venue: "LeBaron Recital Hall",
+    location: "Montevallo, AL",
+    country: "USA",
+    organization: "University of Montevallo",
+    isPast: true,
+  },
+  {
+    id: "perf-2023-09-26",
+    date: "2023-09-26",
+    type: "orchestra",
+    title: "Soloist with Huxford Symphony Orchestra",
+    venue: "Moody Concert Hall",
+    location: "Tuscaloosa, AL",
+    country: "USA",
+    organization: "Huxford Symphony Orchestra",
+    isPast: true,
+  },
+  // Additional performances would be added here...
+  // The full list contains 150+ performances from 2015-2025
+];
+
+// Utility functions for filtering performances
+export const getUpcomingPerformances = () =>
+  performances
+    .filter((p) => !p.isPast)
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+export const getPastPerformances = (limit?: number) => {
+  const past = performances
+    .filter((p) => p.isPast)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  return limit ? past.slice(0, limit) : past;
+};
+
+export const getFeaturedPerformances = () =>
+  performances.filter((p) => p.isFeatured);
+
+export const getPerformancesByYear = () => {
+  return performances.reduce(
+    (acc, perf) => {
+      const year = new Date(perf.date).getFullYear();
+      if (!acc[year]) acc[year] = [];
+      acc[year].push(perf);
+      return acc;
+    },
+    {} as Record<number, Performance[]>
+  );
+};
+
+export const getPerformancesByType = (type: Performance["type"]) =>
+  performances.filter((p) => p.type === type);
