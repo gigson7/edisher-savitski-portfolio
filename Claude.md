@@ -93,10 +93,15 @@ Professional portfolio website for Dr. Edisher Savitski, an award-winning concer
 - Lazy loading: First 3 images eager, rest lazy
 - Responsive srcset for optimal loading
 
+**Image Object Positioning (head/body cropping):**
+- `DSCF5956`: `center 28%` (close-up portrait, face in upper-middle)
+- `DSCF6301`, `DSCF6347`, `edisher 123`, `edisher 124`: `center top` (show head fully)
+- `edisher 127`: `center 80%` (body in lower portion of tall image)
+- `edisher 130`, `edisher 132`: default (center center)
+
 **First 3 Images (Portrait Orientation):**
 - Files: `DSCF5956`, `DSCF6301`, `DSCF6347`
 - Rotated 180° from original (using `sips -r 90` twice)
-- Special positioning: `objectPosition: "center center"`
 - Dimensions: 800x1200 (portrait)
 
 **Lightbox:**
@@ -109,11 +114,11 @@ Professional portfolio website for Dr. Edisher Savitski, an award-winning concer
 **Location:** `/components/home/HeroSection.tsx`
 
 **Current Content:**
-- Title: "Concert Pianist • Associate Professor • Artistic Director" (gold, 2xl-3xl)
+- Title: "Pianist • Associate Professor • Artistic Director" (gold, 2xl-3xl)
 - Buttons: "View Upcoming Events" and "Watch Performances"
-- Image: Centered, responsive width (85% mobile, 80% tablet, 70% desktop)
+- Desktop layout: Image on LEFT (35% width), text/buttons on RIGHT (right-aligned)
+- Mobile/Tablet: Image centered (85%/80% width), buttons below hero in separate section
 - Gradient overlay for text readability
-- Padding: 30px top spacing for content
 
 **Image Specifications:**
 - Source: `/images/hero/hero-main.webp`
@@ -125,9 +130,9 @@ Professional portfolio website for Dr. Edisher Savitski, an award-winning concer
 
 **Content Highlights:**
 - Opening paragraph: {biography.shortBio}
-- Second paragraph: Starts with prestigious venues mention
-  - "Award-winning pianist performing at prestigious venues worldwide including Carnegie Hall, Wigmore Hall, and Teatro alla Scala..."
+- Second paragraph: Original bio text about master classes and broadcasts
 - Highlights grid: Yamaha Artist, Award Winner, Professor, Artistic Director
+- Inline links on specific words: "Yamaha" → yamaha.com, "University of Alabama" → piano.music.ua.edu, "Toradze" → toradze.org
 
 ### 4. Favicon
 **Design:** Piano keys icon
@@ -174,7 +179,7 @@ Professional portfolio website for Dr. Edisher Savitski, an award-winning concer
 - Brief description
 - Email: contact@edishersavitski.com
 - "Send a Message →" link to /contact page
-- Social media links (YouTube, Facebook, Instagram, LinkedIn)
+- Social media links (YouTube, Instagram, Facebook) — LinkedIn removed
 - Copyright notice
 
 ## Environment Variables
@@ -287,14 +292,29 @@ sips -Z 1200 input.jpg --out large.jpg
 ### Photo Gallery Images
 - First 3 images are portrait orientation (800x1200)
 - These were rotated 180° from original
-- Use `objectPosition: "center center"` for proper display
-- Images 4-5 ensure Edisher's face is centered (not cropped at top)
+- Each image has custom `objectPosition` to ensure head/body is visible in 4:3 preview crop
+- See "Image Object Positioning" section above for per-image values
 
 ### Hero Section
-- Text positioned with 30px top padding
+- Desktop: Image LEFT (35%), text/buttons RIGHT (right-aligned, vertically centered)
+- Mobile/Tablet: Image centered, buttons below hero
 - Content is vertically centered with `items-center`
-- Image uses responsive width percentages
 - Gradient overlay maintains text readability
+
+### Contact Page
+- Simplified to centered "Send a Message" form only (max-w-2xl)
+- ContactInfo section (email, institution, location) removed
+- Reduced top padding above form
+
+### About Page Bio Text
+- All biography text must come from the original source document (SavitskiBio.docx)
+- Do NOT rewrite or summarize the original text — use it verbatim
+- biography.ts sections should match the docx content exactly
+
+### Social Links
+- YouTube: https://www.youtube.com/@svetski
+- Instagram: https://www.instagram.com/edishersavitski/
+- Facebook: https://www.facebook.com/edisher
 
 ### SEO Metadata
 - All pages have metadata exports
@@ -355,6 +375,6 @@ sips -Z 1200 input.jpg --out large.jpg
 
 ---
 
-**Last Updated:** February 9, 2026
-**Version:** 1.0.0
-**Maintainer:** Dr. Edisher Savitski with Claude Sonnet 4.5
+**Last Updated:** February 10, 2026
+**Version:** 1.1.0
+**Maintainer:** Dr. Edisher Savitski with Claude

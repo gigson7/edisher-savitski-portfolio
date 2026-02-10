@@ -2,8 +2,6 @@ import { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { ContactForm } from "@/components/contact/ContactForm";
-import { ContactInfo } from "@/components/contact/ContactInfo";
-
 export const metadata: Metadata = {
   title: "Contact",
   description:
@@ -27,16 +25,10 @@ export default function ContactPage() {
         </Container>
       </Section>
 
-      {/* Contact Form and Info */}
-      <Section background="gray">
+      {/* Contact Form */}
+      <Section background="gray" className="!pt-6">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Info */}
-            <div>
-              <ContactInfo />
-            </div>
-
-            {/* Contact Form */}
+          <div className="max-w-2xl mx-auto">
             <div className="bg-white p-8 rounded-lg shadow-sm border border-primary-200">
               <h3 className="text-2xl font-serif font-semibold text-primary-800 mb-6">
                 Send a Message
