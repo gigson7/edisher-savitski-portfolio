@@ -29,7 +29,7 @@ export default function TeachingPage() {
       </Section>
 
       {/* Content */}
-      <Section background="gray">
+      <Section background="gray" className="!pt-6">
         <Container>
           <div className="max-w-4xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -37,10 +37,10 @@ export default function TeachingPage() {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent-100 mb-4">
                   <GraduationCap className="w-8 h-8 text-accent-600" />
                 </div>
-                <h3 className="text-lg font-serif font-semibold text-primary-800 mb-2">
+                <h3 className="text-xl font-serif font-semibold text-primary-800 mb-2">
                   Professor
                 </h3>
-                <p className="text-sm text-primary-600">
+                <p className="text-base text-primary-600">
                   Associate Professor at University of Alabama School of Music
                 </p>
               </div>
@@ -49,10 +49,10 @@ export default function TeachingPage() {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent-100 mb-4">
                   <Users className="w-8 h-8 text-accent-600" />
                 </div>
-                <h3 className="text-lg font-serif font-semibold text-primary-800 mb-2">
+                <h3 className="text-xl font-serif font-semibold text-primary-800 mb-2">
                   Masterclasses
                 </h3>
-                <p className="text-sm text-primary-600">
+                <p className="text-base text-primary-600">
                   Regular masterclasses throughout USA, Europe, and China
                 </p>
               </div>
@@ -61,10 +61,10 @@ export default function TeachingPage() {
                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-accent-100 mb-4">
                   <Globe className="w-8 h-8 text-accent-600" />
                 </div>
-                <h3 className="text-lg font-serif font-semibold text-primary-800 mb-2">
+                <h3 className="text-xl font-serif font-semibold text-primary-800 mb-2">
                   Clinician
                 </h3>
-                <p className="text-sm text-primary-600">
+                <p className="text-base text-primary-600">
                   International clinician and pedagogue
                 </p>
               </div>

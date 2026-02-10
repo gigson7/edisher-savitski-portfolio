@@ -21,38 +21,15 @@ export default function AboutPage() {
             <h1 className="text-3xl sm:text-4xl font-serif font-bold text-primary-800 mb-2">
               About Dr. Edisher Savitski
             </h1>
-            <p className="text-lg text-primary-600">
-              {biography.shortBio}
+            <p className="text-lg text-primary-700 leading-relaxed">
+              {biography.shortBio} {biography.sections[0]?.content}
             </p>
           </div>
         </Container>
       </Section>
 
-      {/* Overview Section */}
-      {biography.sections[0] && (
-        <Section background="gray" className="!py-12 sm:!py-16 lg:!py-20">
-          <Container>
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-serif font-semibold text-primary-800 mb-6">
-                {biography.sections[0].title}
-              </h2>
-              <div className="prose prose-lg max-w-none">
-                {biography.sections[0].content.split("\n\n").map((paragraph, idx) => (
-                  <p
-                    key={idx}
-                    className="text-primary-700 mb-4 leading-relaxed"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            </div>
-          </Container>
-        </Section>
-      )}
-
       {/* Critical Acclaim - Testimonials */}
-      <Section background="white" className="!py-12 sm:!py-16 lg:!py-20">
+      <Section background="white" className="!pt-4 !pb-12 sm:!pb-16 lg:!pb-20">
         <Container>
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
