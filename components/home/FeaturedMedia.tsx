@@ -20,17 +20,17 @@ export function FeaturedMedia() {
     {
       src: "/images/gallery/DSCF5956-large.webp",
       alt: "Dr. Edisher Savitski performing",
-      objectPosition: "center center", // Portrait image - center face
+      objectPosition: "center 28%",
     },
     {
       src: "/images/gallery/DSCF6301-large.webp",
       alt: "Piano performance",
-      objectPosition: "center center", // Portrait image - center person
+      objectPosition: "center top",
     },
     {
       src: "/images/gallery/DSCF6347-large.webp",
       alt: "Concert hall performance",
-      objectPosition: "center center", // Portrait image - center person
+      objectPosition: "center top",
     },
   ];
 

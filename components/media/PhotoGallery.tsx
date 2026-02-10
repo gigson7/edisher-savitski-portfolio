@@ -9,29 +9,29 @@ const galleryImages = [
   {
     src: "/images/gallery/DSCF5956-large.webp",
     alt: "Dr. Edisher Savitski performing",
-    objectPosition: "center center", // Portrait image - center face
+    objectPosition: "center 28%",
   },
   {
     src: "/images/gallery/DSCF6301-large.webp",
     alt: "Piano performance",
-    objectPosition: "center center", // Portrait image - center person
+    objectPosition: "center top",
   },
   {
     src: "/images/gallery/DSCF6347-large.webp",
     alt: "Concert hall performance",
-    objectPosition: "center center", // Portrait image - center person
+    objectPosition: "center top",
   },
   {
     src: "/images/gallery/edisher 123-large.webp",
     alt: "Performance at piano",
-    objectPosition: "center 30%", // Adjust to show face properly
+    objectPosition: "center top",
   },
   {
     src: "/images/gallery/edisher 124-large.webp",
     alt: "Recital performance",
-    objectPosition: "center 30%", // Adjust to show face properly
+    objectPosition: "center top",
   },
-  { src: "/images/gallery/edisher 127-large.webp", alt: "Solo recital" },
+  { src: "/images/gallery/edisher 127-large.webp", alt: "Solo recital", objectPosition: "center 80%" },
   { src: "/images/gallery/edisher 130-large.webp", alt: "Concert performance" },
   { src: "/images/gallery/edisher 132-large.webp", alt: "Piano recital" },
 ];

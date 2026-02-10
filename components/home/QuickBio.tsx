@@ -10,7 +10,11 @@ export function QuickBio() {
     {
       icon: Music,
       title: "Yamaha Artist",
-      description: "Official Yamaha Artist and clinician",
+      description: (
+        <>
+          Official <a href="https://www.yamaha.com/yasi/artists/details.html?CNTID=4101986&type=classical" target="_blank" rel="noopener noreferrer" className="text-gold-600 hover:text-gold-700 underline underline-offset-2">Yamaha</a> Artist and clinician
+        </>
+      ),
     },
     {
       icon: Award,
@@ -20,12 +24,20 @@ export function QuickBio() {
     {
       icon: GraduationCap,
       title: "Professor",
-      description: "Associate Professor at University of Alabama",
+      description: (
+        <>
+          Associate Professor at <a href="https://piano.music.ua.edu/?_gl=1%2Agtydnc%2A_ga%2ANTY1ODQ3MTQ2LjE3NzA2NTkzOTEu%2A_ga_HH7BR7ZRHP%2AczE3NzA2NTkzOTEkbzEkZzAkdDE3NzA2NTkzOTEkajYwJGwwJGgw" target="_blank" rel="noopener noreferrer" className="text-gold-600 hover:text-gold-700 underline underline-offset-2">University of Alabama</a>
+        </>
+      ),
     },
     {
       icon: Users,
       title: "Artistic Director",
-      description: "Toradze International Music Festival",
+      description: (
+        <>
+          <a href="https://toradze.org/" target="_blank" rel="noopener noreferrer" className="text-gold-600 hover:text-gold-700 underline underline-offset-2">Toradze</a> International Music Festival
+        </>
+      ),
     },
   ];
 
@@ -42,10 +54,8 @@ export function QuickBio() {
               {biography.shortBio}
             </p>
             <p className="text-xl text-neutral-600 mb-10 leading-relaxed">
-              Award-winning pianist performing at prestigious venues worldwide including
-              Carnegie Hall, Wigmore Hall, and Teatro alla Scala. As a clinician he regularly
-              conducts master classes throughout USA, Europe and China. His performances have
-              been praised by critics worldwide and broadcasted on live TV and radio throughout
+              As a clinician he regularly conducts master classes throughout USA, Europe and
+              China. His performances are frequently broadcasted on live TV and radio throughout
               Europe and USA.
             </p>
             <Link href="/about">

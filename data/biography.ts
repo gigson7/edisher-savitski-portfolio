@@ -18,17 +18,15 @@ In November 2007, Dr. Savitski became first pianist who performed in an unpreced
     {
       id: "overview",
       title: "Overview",
-      content: `As a clinician he regularly conducts master classes throughout USA, Europe and China. His performances have been praised by critics worldwide and broadcasted on live TV and radio throughout Europe and USA.
-
-He has enjoyed critical acclaim throughout his career from prestigious publications worldwide.`,
+      content: `As a clinician he regularly conducts master classes throughout USA, Europe and China.`,
       order: 1,
     },
     {
       id: "performance-venues",
       title: "Performance Venues & Festivals",
-      content: `Dr. Edisher Savitski has been performing at prestigious venues worldwide including Carnegie Zankel Hall and Carnegie Weill Hall, New York; Wigmore Hall, London; Great Hall of Mozarteum, Salzburg, Austria; Mariinsky Theater and Concert Hall, St. Petersburg, Russia; Teatro alla Scala, Milan, Italy.
+      content: `Dr. Edisher Savitski has been performing at prestigious venues worldwide. To name a few: Carnegie Zankel Hall and Carnegie Weill Hall, New York; Wigmore Hall, London; Great Hall of Mozarteum, Salzburg, Austria; Mariinsky Theater and Concert Hall, St. Petersburg, Russia; Teatro alla Scala, Milan, Italy as well as in other venues in USA, Canada, Germany, Georgia, Spain, Italy, Portugal, Switzerland, France, Russia, United Kingdom, Israel, Austria, Morocco, China, Japan and New Zealand.
 
-He performed at major music festivals such as Salzburg Festival, Austria; Gilmore Keyboard Festival, Ravinia Festival, USA; Ruhr Festival, Germany; Ravenna Festival, Stresa Festival, Maggio Musicale Festival in Florence, MITO Festival, Italy; Rachmaninoff and Tchaikovsky festivals through Pittsburgh Symphony.`,
+He performed at major music festivals such as: Salzburg Festival, Austria; Gilmore Keyboard Festival, Ravinia Festival, USA; Ruhr Festival, Germany; Ravenna Festival, Stresa Festival, Maggio Musicale Festival in Florence, MITO Festival, Italy; Rachmaninoff and Tchaikovsky festivals through Pittsburgh Symphony. His performances were also heard in Grande Auditorio at Temporada Gulbenkian de Musica in Lisbon, Portugal; at Teatro la Fenice, Venice, Italy; Stadt-Casino Musiksaal in Basel, Switzerland; Salle Cortot in Paris, France; at Dame Myra Hess series in Chicago; Segerstrom Hall in California.`,
       order: 2,
     },
     {

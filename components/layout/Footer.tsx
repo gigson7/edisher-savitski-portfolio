@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { siteConfig } from "@/data/site-config";
-import { Youtube, Linkedin, Instagram, Facebook } from "lucide-react";
+import { Youtube, Instagram, Facebook } from "lucide-react";
 
 const socialLinks = [
   {
@@ -10,18 +10,13 @@ const socialLinks = [
     icon: Youtube,
   },
   {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/in/edisher-savitski",
-    icon: Linkedin,
-  },
-  {
     name: "Instagram",
-    href: "https://www.instagram.com/edisher.savitski",
+    href: "https://www.instagram.com/edishersavitski/",
     icon: Instagram,
   },
   {
     name: "Facebook",
-    href: "https://www.facebook.com/edisher.savitski",
+    href: "https://www.facebook.com/edisher",
     icon: Facebook,
   },
 ];
