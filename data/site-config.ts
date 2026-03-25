@@ -1,7 +1,7 @@
 import { SiteConfig } from "@/types";
 
 export const siteConfig: SiteConfig = {
-  name: "Dr. Edisher Savitski",
+  name: "Edisher Savitski",
   title: "Dr. Edisher Savitski - Concert Pianist",
   description:
     "Award-winning concert pianist Dr. Edisher Savitski, Associate Professor at University of Alabama, performs at prestigious venues worldwide including Carnegie Hall and Wigmore Hall.",
