@@ -24,16 +24,11 @@ export function ContactForm() {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
-    if (!siteConfig.formspree.endpoint) {
-      setSubmitStatus("error");
-      return;
-    }
-
     setIsSubmitting(true);
     setSubmitStatus("idle");
 
     try {
-      const response = await fetch(siteConfig.formspree.endpoint, {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
@@ -126,18 +121,12 @@ export function ContactForm() {
 
       <Button
         type="submit"
-        disabled={isSubmitting || !siteConfig.formspree.endpoint}
+        disabled={isSubmitting}
         size="lg"
         className="w-full"
       >
         {isSubmitting ? "Sending..." : "Send Message"}
       </Button>
-
-      {!siteConfig.formspree.endpoint && (
-        <p className="text-sm text-amber-600 text-center">
-          Contact form is not configured yet. Please use the email address below.
-        </p>
-      )}
 
       {submitStatus === "success" && (
         <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">

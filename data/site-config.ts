@@ -8,7 +8,7 @@ export const siteConfig: SiteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://edishersavitski.com",
 
   contact: {
-    email: "contact@edishersavitski.com", // Update with actual email
+    email: "piano@edishersavitski.com", // Update with actual email
     phone: "", // Add if available
     social: {
       youtube: "https://www.youtube.com/@svetski",
