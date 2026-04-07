@@ -4,8 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { PerformanceType } from "@/lib/generated/prisma/enums";
-
 export async function deletePerformance(id: number) {
   const session = await getSession();
   if (!session) {
@@ -32,10 +30,6 @@ function parseStringArray(raw: string | null): string[] {
   }
 }
 
-function isValidPerformanceType(value: string): value is PerformanceType {
-  return Object.values(PerformanceType).includes(value as PerformanceType);
-}
-
 export async function createPerformance(
   prevState: ActionState,
   formData: FormData
@@ -47,7 +41,6 @@ export async function createPerformance(
 
   const title = (formData.get("title") as string | null)?.trim() ?? "";
   const dateString = (formData.get("date") as string | null)?.trim() ?? "";
-  const type = (formData.get("type") as string | null)?.trim() ?? "";
   const venue = (formData.get("venue") as string | null)?.trim() ?? "";
   const location = (formData.get("location") as string | null)?.trim() ?? "";
   const country = (formData.get("country") as string | null)?.trim() ?? "";
@@ -63,8 +56,6 @@ export async function createPerformance(
 
   if (!title) return { error: "Title is required." };
   if (!dateString) return { error: "Date is required." };
-  if (!type || !isValidPerformanceType(type))
-    return { error: "Please select a valid performance type." };
   if (!venue) return { error: "Venue is required." };
   if (!location) return { error: "Location is required." };
   if (!country) return { error: "Country is required." };
@@ -77,7 +68,7 @@ export async function createPerformance(
     data: {
       title,
       date,
-      type,
+      type: "solo",
       venue,
       location,
       country,
@@ -107,7 +98,6 @@ export async function updatePerformance(
 
   const title = (formData.get("title") as string | null)?.trim() ?? "";
   const dateString = (formData.get("date") as string | null)?.trim() ?? "";
-  const type = (formData.get("type") as string | null)?.trim() ?? "";
   const venue = (formData.get("venue") as string | null)?.trim() ?? "";
   const location = (formData.get("location") as string | null)?.trim() ?? "";
   const country = (formData.get("country") as string | null)?.trim() ?? "";
@@ -123,8 +113,6 @@ export async function updatePerformance(
 
   if (!title) return { error: "Title is required." };
   if (!dateString) return { error: "Date is required." };
-  if (!type || !isValidPerformanceType(type))
-    return { error: "Please select a valid performance type." };
   if (!venue) return { error: "Venue is required." };
   if (!location) return { error: "Location is required." };
   if (!country) return { error: "Country is required." };
@@ -137,7 +125,6 @@ export async function updatePerformance(
     data: {
       title,
       date,
-      type,
       venue,
       location,
       country,

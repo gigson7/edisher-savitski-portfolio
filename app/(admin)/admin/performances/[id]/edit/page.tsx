@@ -39,7 +39,6 @@ export default async function EditPerformancePage({ params }: PageProps) {
           id: performance.id,
           title: performance.title,
           date: performance.date,
-          type: performance.type,
           venue: performance.venue,
           location: performance.location,
           country: performance.country,

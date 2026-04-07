@@ -2,13 +2,10 @@
 
 import { useActionState, useRef, useState } from "react";
 import Link from "next/link";
-import { PerformanceType } from "@/lib/generated/prisma/enums";
-
 type PerformanceData = {
   id: number;
   title: string;
   date: Date;
-  type: string;
   venue: string;
   location: string;
   country: string;
@@ -165,34 +162,6 @@ export function PerformanceForm({ performance, action }: Props) {
               defaultValue={defaultDate}
               className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm bg-white text-neutral-800 focus:outline-none focus:ring-2 focus:ring-[#8d7336]"
             />
-          </div>
-
-          {/* Type */}
-          <div>
-            <label
-              htmlFor="type"
-              className="block text-sm font-medium text-neutral-700 mb-1.5"
-            >
-              Type <span className="text-red-500">*</span>
-            </label>
-            <select
-              id="type"
-              name="type"
-              required
-              defaultValue={performance?.type ?? ""}
-              className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm bg-white text-neutral-800 focus:outline-none focus:ring-2 focus:ring-[#8d7336]"
-            >
-              <option value="" disabled>
-                Select type…
-              </option>
-              {(
-                Object.values(PerformanceType) as PerformanceType[]
-              ).map((t) => (
-                <option key={t} value={t}>
-                  {t.charAt(0).toUpperCase() + t.slice(1)}
-                </option>
-              ))}
-            </select>
           </div>
 
           {/* Venue */}
