@@ -1,12 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Video } from "@/types";
 import { VideoEmbed } from "./VideoEmbed";
 import { Button } from "@/components/ui/Button";
 
+type VideoData = {
+  id: number;
+  youtubeId: string;
+  title: string;
+  description: string | null;
+};
+
 interface VideoGalleryProps {
-  videos: Video[];
+  videos: VideoData[];
 }
 
 const ITEMS_PER_PAGE = 6;

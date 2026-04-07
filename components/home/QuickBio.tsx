@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { biography } from "@/data/biography";
+import { getBiography } from "@/lib/data";
 import { Button } from "@/components/ui/Button";
 import { Award, Music, GraduationCap, Users } from "lucide-react";
 
-export function QuickBio() {
+export async function QuickBio() {
+  const biography = await getBiography();
   const highlights = [
     {
       icon: Music,
@@ -51,7 +52,7 @@ export function QuickBio() {
               About Dr. Savitski
             </h2>
             <p className="text-xl text-neutral-700 mb-6 leading-relaxed">
-              {biography.shortBio}
+              {biography?.shortBio}
             </p>
             <p className="text-xl text-neutral-600 mb-10 leading-relaxed">
               As a clinician he regularly conducts master classes throughout USA, Europe and

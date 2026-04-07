@@ -2,7 +2,9 @@ import { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { EventsList } from "@/components/events/EventsList";
-import { getUpcomingPerformances, getPastPerformances } from "@/data/performances";
+import { getUpcomingPerformances, getPastPerformances } from "@/lib/data";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -10,9 +12,11 @@ export const metadata: Metadata = {
     "View upcoming concerts and past performances by Dr. Edisher Savitski at venues including Carnegie Hall, Wigmore Hall, and Teatro alla Scala.",
 };
 
-export default function EventsPage() {
-  const upcomingPerformances = getUpcomingPerformances();
-  const pastPerformances = getPastPerformances();
+export default async function EventsPage() {
+  const [upcomingPerformances, pastPerformances] = await Promise.all([
+    getUpcomingPerformances(),
+    getPastPerformances(),
+  ]);
 
   return (
     <>

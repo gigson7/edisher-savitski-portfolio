@@ -1,16 +1,31 @@
-import { Performance } from "@/types";
 import { Card } from "@/components/ui/Card";
 import { formatDateShort } from "@/lib/utils";
 import { Calendar, MapPin, Music, Users } from "lucide-react";
 
+type PerformanceData = {
+  id: number;
+  title: string;
+  date: Date;
+  type: string;
+  venue: string;
+  location: string;
+  country: string;
+  organization: string | null;
+  collaborators: unknown;
+  repertoire: unknown;
+  isFeatured: boolean;
+};
+
 interface EventCardProps {
-  performance: Performance;
+  performance: PerformanceData;
 }
 
 export function EventCard({ performance }: EventCardProps) {
+  const isPast = performance.date < new Date();
+
   return (
     <Card hover className="flex flex-col h-full">
-      {!performance.isPast && (
+      {!isPast && (
         <div className="mb-5">
           <span className="text-xs font-medium text-gold-600 px-3 py-1 border border-gold-400 rounded">Upcoming</span>
         </div>
@@ -41,18 +56,18 @@ export function EventCard({ performance }: EventCardProps) {
           </div>
         )}
 
-        {performance.collaborators && performance.collaborators.length > 0 && (
+        {Array.isArray(performance.collaborators) && performance.collaborators.length > 0 && (
           <div className="flex items-start gap-2 text-lg text-neutral-600">
             <Users className="w-4 h-4 mt-0.5 flex-shrink-0 text-gold-600" />
-            <span>{performance.collaborators.join(", ")}</span>
+            <span>{(performance.collaborators as string[]).join(", ")}</span>
           </div>
         )}
 
-        {performance.repertoire && performance.repertoire.length > 0 && (
+        {Array.isArray(performance.repertoire) && performance.repertoire.length > 0 && (
           <div className="mt-4 pt-4 border-t border-neutral-200">
             <p className="text-xs text-neutral-500 mb-1 uppercase tracking-wide">Repertoire:</p>
             <p className="text-lg text-neutral-600">
-              {performance.repertoire.join(", ")}
+              {(performance.repertoire as string[]).join(", ")}
             </p>
           </div>
         )}

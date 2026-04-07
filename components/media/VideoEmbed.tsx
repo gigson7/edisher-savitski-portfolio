@@ -1,7 +1,12 @@
-import { Video } from "@/types";
+type VideoData = {
+  id: number;
+  youtubeId: string;
+  title: string;
+  description: string | null;
+};
 
 interface VideoEmbedProps {
-  video: Video;
+  video: VideoData;
   showDescription?: boolean;
 }
 

@@ -5,47 +5,23 @@ import Image from "next/image";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
-const galleryImages = [
-  {
-    src: "/images/gallery/DSCF5956-large.webp",
-    alt: "Dr. Edisher Savitski performing",
-    objectPosition: "center 28%",
-  },
-  {
-    src: "/images/gallery/DSCF6301-large.webp",
-    alt: "Piano performance",
-    objectPosition: "center top",
-  },
-  {
-    src: "/images/gallery/DSCF6347-large.webp",
-    alt: "Concert hall performance",
-    objectPosition: "center top",
-  },
-  {
-    src: "/images/gallery/edisher 123-large.webp",
-    alt: "Performance at piano",
-    objectPosition: "center top",
-  },
-  {
-    src: "/images/gallery/edisher 124-large.webp",
-    alt: "Recital performance",
-    objectPosition: "center top",
-  },
-  { src: "/images/gallery/edisher 127-large.webp", alt: "Solo recital", objectPosition: "center 80%" },
-  { src: "/images/gallery/edisher 130-large.webp", alt: "Concert performance" },
-  { src: "/images/gallery/edisher 132-large.webp", alt: "Piano recital" },
-];
+type PhotoData = {
+  id: number;
+  filename: string;
+  altText: string;
+  objectPosition: string;
+};
 
-export function PhotoGallery() {
+export function PhotoGallery({ photos }: { photos: PhotoData[] }) {
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {galleryImages.map((image, index) => (
+        {photos.map((photo, index) => (
           <button
-            key={index}
+            key={photo.id}
             onClick={() => {
               setPhotoIndex(index);
               setIsOpen(true);
@@ -53,14 +29,14 @@ export function PhotoGallery() {
             className="relative aspect-[4/3] overflow-hidden rounded-lg group cursor-pointer"
           >
             <Image
-              src={image.src}
-              alt={image.alt}
+              src={`/images/gallery/${photo.filename}-large.webp`}
+              alt={photo.altText}
               fill
               loading={index < 3 ? "eager" : "lazy"}
               className="object-cover transition-transform group-hover:scale-105"
               style={
-                image.objectPosition
-                  ? { objectPosition: image.objectPosition }
+                photo.objectPosition
+                  ? { objectPosition: photo.objectPosition }
                   : undefined
               }
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -74,7 +50,7 @@ export function PhotoGallery() {
         open={isOpen}
         close={() => setIsOpen(false)}
         index={photoIndex}
-        slides={galleryImages.map((img) => ({ src: img.src }))}
+        slides={photos.map((photo) => ({ src: `/images/gallery/${photo.filename}-large.webp` }))}
       />
     </>
   );

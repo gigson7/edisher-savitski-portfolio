@@ -3,7 +3,9 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { PhotoGallery } from "@/components/media/PhotoGallery";
 import { VideoGallery } from "@/components/media/VideoGallery";
-import { videos } from "@/data/videos";
+import { getVideos, getPhotos } from "@/lib/data";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Media",
@@ -11,7 +13,8 @@ export const metadata: Metadata = {
     "Photo gallery and video performances of Dr. Edisher Savitski performing at prestigious venues worldwide.",
 };
 
-export default function MediaPage() {
+export default async function MediaPage() {
+  const [videos, photos] = await Promise.all([getVideos(), getPhotos()]);
   return (
     <>
       {/* Header */}
@@ -72,7 +75,7 @@ export default function MediaPage() {
               Professional photographs from concerts and recitals
             </p>
           </div>
-          <PhotoGallery />
+          <PhotoGallery photos={photos} />
         </Container>
       </Section>
     </>

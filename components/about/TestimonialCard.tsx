@@ -1,5 +1,12 @@
 import { Quote } from "lucide-react";
-import { Testimonial } from "@/types";
+
+type Testimonial = {
+  id: string;
+  quote: string;
+  author: string;
+  source: string;
+  performance?: string | null;
+};
 
 interface TestimonialCardProps {
   testimonial: Testimonial;

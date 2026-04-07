@@ -3,13 +3,15 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { getFeaturedPerformances, getUpcomingPerformances } from "@/data/performances";
+import { getFeaturedPerformances, getUpcomingPerformances } from "@/lib/data";
 import { formatDateShort } from "@/lib/utils";
 import { Calendar, MapPin, Music } from "lucide-react";
 
-export function FeaturedPerformances() {
-  const featured = getFeaturedPerformances();
-  const upcoming = getUpcomingPerformances();
+export async function FeaturedPerformances() {
+  const [featured, upcoming] = await Promise.all([
+    getFeaturedPerformances(),
+    getUpcomingPerformances(),
+  ]);
   const displayPerformances = featured.length > 0 ? featured.slice(0, 3) : upcoming.slice(0, 3);
 
   return (

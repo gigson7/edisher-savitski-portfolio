@@ -3,6 +3,9 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { QuickBio } from "@/components/home/QuickBio";
 import { FeaturedPerformances } from "@/components/home/FeaturedPerformances";
 import { FeaturedMedia } from "@/components/home/FeaturedMedia";
+import { getFeaturedVideos, getFeaturedPhotos } from "@/lib/data";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Dr. Edisher Savitski - Award-Winning Concert Pianist",
@@ -23,13 +26,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+export default async function Home() {
+  const [featuredVideos, featuredPhotos] = await Promise.all([
+    getFeaturedVideos(),
+    getFeaturedPhotos(),
+  ]);
+
   return (
     <>
       <HeroSection />
       <QuickBio />
       <FeaturedPerformances />
-      <FeaturedMedia />
+      <FeaturedMedia videos={featuredVideos} photos={featuredPhotos} />
     </>
   );
 }

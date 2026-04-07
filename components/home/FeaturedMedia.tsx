@@ -7,32 +7,34 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { VideoEmbed } from "@/components/media/VideoEmbed";
-import { getFeaturedVideos } from "@/data/videos";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
-export function FeaturedMedia() {
+type VideoData = {
+  id: number;
+  youtubeId: string;
+  title: string;
+  description: string | null;
+};
+
+type PhotoData = {
+  id: number;
+  filename: string;
+  altText: string;
+  objectPosition: string;
+};
+
+interface FeaturedMediaProps {
+  videos: VideoData[];
+  photos: PhotoData[];
+}
+
+export function FeaturedMedia({ videos, photos }: FeaturedMediaProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [photoIndex, setPhotoIndex] = useState(0);
 
-  const featuredVideos = getFeaturedVideos().slice(0, 3);
-  const featuredPhotos = [
-    {
-      src: "/images/gallery/DSCF5956-large.webp",
-      alt: "Dr. Edisher Savitski performing",
-      objectPosition: "center 28%",
-    },
-    {
-      src: "/images/gallery/DSCF6301-large.webp",
-      alt: "Piano performance",
-      objectPosition: "center top",
-    },
-    {
-      src: "/images/gallery/DSCF6347-large.webp",
-      alt: "Concert hall performance",
-      objectPosition: "center top",
-    },
-  ];
+  const featuredVideos = videos.slice(0, 3);
+  const featuredPhotos = photos.slice(0, 3);
 
   return (
     <Section background="white">
@@ -87,7 +89,7 @@ export function FeaturedMedia() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {featuredPhotos.map((photo, index) => (
               <button
-                key={index}
+                key={photo.id}
                 onClick={() => {
                   setPhotoIndex(index);
                   setIsOpen(true);
@@ -95,8 +97,8 @@ export function FeaturedMedia() {
                 className="relative aspect-[4/3] overflow-hidden rounded-lg group cursor-pointer"
               >
                 <Image
-                  src={photo.src}
-                  alt={photo.alt}
+                  src={`/images/gallery/${photo.filename}-large.webp`}
+                  alt={photo.altText}
                   fill
                   className="object-cover transition-transform group-hover:scale-105"
                   style={
@@ -115,7 +117,7 @@ export function FeaturedMedia() {
             open={isOpen}
             close={() => setIsOpen(false)}
             index={photoIndex}
-            slides={featuredPhotos.map((img) => ({ src: img.src }))}
+            slides={featuredPhotos.map((photo) => ({ src: `/images/gallery/${photo.filename}-large.webp` }))}
           />
         </div>
       </Container>
