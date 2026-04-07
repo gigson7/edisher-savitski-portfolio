@@ -12,6 +12,40 @@
 
 ---
 
+### Pre-Implementation Review Amendments (Codex gpt-5.3)
+
+The following fixes from Codex review MUST be applied during implementation:
+
+1. **Route groups for layout hierarchy** — Use `app/(admin-auth)/admin/login/`, `app/(admin-auth)/admin/forgot-password/`, `app/(admin-auth)/admin/reset-password/` with a bare layout (no sidebar). Use `app/(admin)/admin/` for dashboard pages with sidebar layout. This prevents App Router's additive layout nesting from wrapping login pages in the sidebar.
+
+2. **Prisma migrations** — Use `prisma migrate dev` locally (not `db push`). Remove `prisma/migrations/` from `.gitignore`. Use `prisma migrate deploy` in production.
+
+3. **XSS prevention on Tiptap links** — Configure Link extension with `protocols: ['http', 'https', 'mailto']` and `autolink: false` to prevent `javascript:` URLs.
+
+4. **Photo upload validation** — Enforce max 10MB file size, MIME allowlist (`image/jpeg`, `image/png`, `image/webp`, `image/avif`), and Sharp metadata verification before processing. Wrap in try/catch with cleanup.
+
+5. **Seed script simplification** — Use `createMany` with `skipDuplicates` instead of upsert-by-counter. One-time migration, not meant to be re-run.
+
+6. **Password reset token invalidation** — On new reset request, invalidate all prior unused tokens for the same user. Atomically consume token with `updateMany where used=false AND expiresAt>now`.
+
+7. **Session refresh** — In middleware, when JWT is past 50% of its lifetime, issue a fresh token with extended expiry (rolling session).
+
+8. **Database indexes** — Add to Prisma schema:
+   - `Performance: @@index([date]), @@index([isFeatured])`
+   - `Video: @@index([sortOrder]), @unique youtubeId`
+   - `Photo: @@index([sortOrder]), @unique filename`
+   - `PasswordResetToken: @@index([adminUserId, used])`
+
+9. **Date normalization** — Parse date inputs as UTC noon (`YYYY-MM-DDT12:00:00Z`) to prevent timezone day-boundary shifts.
+
+10. **Performance filter fix** — Year filter must AND with tab constraint (upcoming/past), not overwrite it.
+
+11. **Missing spec features** — Add drag-reorder UI for videos/photos, performance type filter dropdown on list page, and unsaved-changes warning on forms.
+
+12. **Explicit git adds** — Never use `git add .` — always list specific files.
+
+---
+
 ### Task 1: Install Dependencies & Environment Setup
 
 **Files:**
