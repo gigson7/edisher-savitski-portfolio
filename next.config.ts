@@ -1,6 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Disable runtime image optimization — images are pre-optimized as WebP.
+  // This prevents sharp/libvips from spawning CPU-count threads at runtime,
+  // which exceeds Hostinger shared hosting's nproc limit.
+  images: {
+    unoptimized: true,
+  },
   // Disable experimental features that may cause issues
   experimental: {
     // Use webpack instead of turbopack for builds

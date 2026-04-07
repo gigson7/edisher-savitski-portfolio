@@ -6,7 +6,11 @@ function createPrismaClient(): PrismaClient {
   if (!url) {
     throw new Error("DATABASE_URL environment variable is not set");
   }
-  const adapter = new PrismaMariaDb(url);
+  // Limit connection pool to reduce thread usage on shared hosting
+  const dbUrl = new URL(url);
+  dbUrl.searchParams.set("connectionLimit", "2");
+  dbUrl.searchParams.set("minimumIdle", "1");
+  const adapter = new PrismaMariaDb(dbUrl.toString());
   return new PrismaClient({ adapter });
 }
 
