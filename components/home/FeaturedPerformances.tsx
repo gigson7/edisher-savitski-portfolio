@@ -27,7 +27,7 @@ export async function FeaturedPerformances() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {displayPerformances.map((performance) => (
+          {displayPerformances.map((performance: { id: string | number; title: string; date: string | Date; venue: string; location: string; organization?: string | null }) => (
             <Card key={performance.id} hover className="flex flex-col h-full">
               <h3 className="text-xl font-semibold text-neutral-900 mb-4">
                 {performance.title}
