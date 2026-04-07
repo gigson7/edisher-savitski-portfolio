@@ -6,16 +6,15 @@ export const dynamic = "force-dynamic";
 
 async function getDashboardStats() {
   try {
-    const [performanceCount, videoCount, photoCount, biography] =
-      await Promise.all([
-        prisma.performance.count(),
-        prisma.video.count(),
-        prisma.photo.count(),
-        prisma.biography.findFirst({
-          select: { updatedAt: true },
-          orderBy: { updatedAt: "desc" },
-        }),
-      ]);
+    // Sequential queries to avoid spawning multiple connections at once
+    // (Hostinger shared hosting has strict thread limits)
+    const performanceCount = await prisma.performance.count();
+    const videoCount = await prisma.video.count();
+    const photoCount = await prisma.photo.count();
+    const biography = await prisma.biography.findFirst({
+      select: { updatedAt: true },
+      orderBy: { updatedAt: "desc" },
+    });
 
     return {
       performanceCount,

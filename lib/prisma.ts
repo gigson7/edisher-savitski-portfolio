@@ -65,9 +65,8 @@ export function getPrisma(): PrismaClientType {
   const adapter = new PrismaMariaDb(pool);
   const client = new PrismaClient({ adapter });
 
-  if (process.env.NODE_ENV !== "production") {
-    globalForPrisma._prisma = client;
-  }
+  // Always cache in production AND development
+  globalForPrisma._prisma = client;
   return client;
 }
 
