@@ -1,23 +1,40 @@
-import { PrismaClient } from "./generated/prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import type { PrismaClient as PrismaClientType } from "./generated/prisma/client";
 
-function createPrismaClient(): PrismaClient {
+const globalForPrisma = globalThis as unknown as {
+  _prisma: PrismaClientType | undefined;
+};
+
+// Lazy singleton — Prisma client is NOT created at import time.
+// This avoids spawning mariadb connection pool threads during Node.js
+// startup, which would exceed Hostinger shared hosting's nproc limit.
+export function getPrisma(): PrismaClientType {
+  if (globalForPrisma._prisma) return globalForPrisma._prisma;
+
+  // Dynamic imports to avoid loading mariadb at module evaluation time
+  const { PrismaClient } = require("./generated/prisma/client");
+  const { PrismaMariaDb } = require("@prisma/adapter-mariadb");
+
   const url = process.env.DATABASE_URL;
   if (!url) {
     throw new Error("DATABASE_URL environment variable is not set");
   }
-  // Limit connection pool to reduce thread usage on shared hosting
   const dbUrl = new URL(url);
   dbUrl.searchParams.set("connectionLimit", "2");
   dbUrl.searchParams.set("minimumIdle", "1");
   const adapter = new PrismaMariaDb(dbUrl.toString());
-  return new PrismaClient({ adapter });
+  const client = new PrismaClient({ adapter });
+
+  if (process.env.NODE_ENV !== "production") {
+    globalForPrisma._prisma = client;
+  }
+  return client;
 }
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
-
-export const prisma = globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+// Backward-compatible export — lazy proxy that creates client on first property access
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const prisma = new Proxy({} as PrismaClientType, {
+  get(_target, prop) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (getPrisma() as any)[prop];
+  },
+});
