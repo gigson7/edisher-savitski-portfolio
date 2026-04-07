@@ -4,6 +4,9 @@
  * NOTE: Re-running will fail on unique constraint violations (by design).
  */
 
+import { config } from "dotenv";
+config({ path: ".env.local" });
+
 import { PrismaClient } from "../lib/generated/prisma/client";
 import { PrismaMariaDb } from "@prisma/adapter-mariadb";
 import * as bcrypt from "bcryptjs";
@@ -72,21 +75,26 @@ async function seedAdmin() {
 // ─── 2. Performances ─────────────────────────────────────────────────────────
 
 async function seedPerformances() {
-  const data = performances.map((p) => ({
-    title: p.title,
-    date: new Date(p.date),
-    type: p.type,
-    venue: p.venue,
-    location: p.location,
-    country: p.country,
-    organization: p.organization ?? null,
-    collaborators: p.collaborators ?? [],
-    repertoire: p.repertoire ?? [],
-    isFeatured: p.isFeatured ?? false,
-  }));
-
-  await prisma.performance.createMany({ data });
-  console.log(`✓ Performances seeded: ${data.length}`);
+  let count = 0;
+  for (const p of performances) {
+    await prisma.performance.create({
+      data: {
+        title: p.title,
+        date: new Date(p.date),
+        type: p.type as "solo" | "chamber" | "orchestra" | "masterclass",
+        venue: p.venue,
+        location: p.location,
+        country: p.country,
+        organization: p.organization ?? null,
+        collaborators: JSON.parse(JSON.stringify(p.collaborators ?? [])),
+        repertoire: JSON.parse(JSON.stringify(p.repertoire ?? [])),
+        isFeatured: p.isFeatured ?? false,
+      },
+    });
+    count++;
+    if (count % 50 === 0) console.log(`  …${count} performances`);
+  }
+  console.log(`✓ Performances seeded: ${count}`);
 }
 
 // ─── 3. Videos ───────────────────────────────────────────────────────────────
@@ -101,7 +109,7 @@ async function seedVideos() {
         description: v.description ?? null,
         performanceDate: v.performanceDate ? new Date(v.performanceDate) : null,
         venue: v.venue ?? null,
-        repertoire: v.repertoire,
+        repertoire: JSON.parse(JSON.stringify(v.repertoire)),
         isFeatured: v.featured ?? false,
         sortOrder: i,
       },
@@ -124,16 +132,19 @@ const PHOTOS = [
 ] as const;
 
 async function seedPhotos() {
-  const data = PHOTOS.map((p, i) => ({
-    filename: p.filename,
-    altText: p.altText,
-    objectPosition: p.objectPosition,
-    sortOrder: i,
-    isFeatured: false,
-  }));
-
-  await prisma.photo.createMany({ data });
-  console.log(`✓ Photos seeded: ${data.length}`);
+  for (let i = 0; i < PHOTOS.length; i++) {
+    const p = PHOTOS[i];
+    await prisma.photo.create({
+      data: {
+        filename: p.filename,
+        altText: p.altText,
+        objectPosition: p.objectPosition,
+        sortOrder: i,
+        isFeatured: false,
+      },
+    });
+  }
+  console.log(`✓ Photos seeded: ${PHOTOS.length}`);
 }
 
 // ─── 5. Biography ─────────────────────────────────────────────────────────────
