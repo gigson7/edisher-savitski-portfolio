@@ -1,11 +1,17 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { PerformanceType } from "@/lib/generated/prisma/enums";
 
 export async function deletePerformance(id: number) {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   await prisma.performance.delete({ where: { id } });
   revalidatePath("/admin/performances");
   revalidatePath("/events");
@@ -34,6 +40,11 @@ export async function createPerformance(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  const session = await getSession();
+  if (!session) {
+    return { error: "Unauthorized" };
+  }
+
   const title = (formData.get("title") as string | null)?.trim() ?? "";
   const dateString = (formData.get("date") as string | null)?.trim() ?? "";
   const type = (formData.get("type") as string | null)?.trim() ?? "";
@@ -89,6 +100,11 @@ export async function updatePerformance(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  const session = await getSession();
+  if (!session) {
+    return { error: "Unauthorized" };
+  }
+
   const title = (formData.get("title") as string | null)?.trim() ?? "";
   const dateString = (formData.get("date") as string | null)?.trim() ?? "";
   const type = (formData.get("type") as string | null)?.trim() ?? "";

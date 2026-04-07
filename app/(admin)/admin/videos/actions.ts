@@ -1,10 +1,21 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 type ActionState = { error?: string } | null;
+
+function sanitizeYoutubeId(input: string): string {
+  // Extract ID from full URLs
+  const match = input.match(
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?\s]+)/
+  );
+  const id = match ? match[1] : input;
+  // Strip any remaining query params or whitespace
+  return id.split(/[?&#\s]/)[0].trim();
+}
 
 function parseStringArray(raw: string | null): string[] {
   if (!raw) return [];
@@ -28,8 +39,15 @@ export async function createVideo(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  const session = await getSession();
+  if (!session) {
+    return { error: "Unauthorized" };
+  }
+
   const title = (formData.get("title") as string | null)?.trim() ?? "";
-  const youtubeId = (formData.get("youtubeId") as string | null)?.trim() ?? "";
+  const youtubeId = sanitizeYoutubeId(
+    (formData.get("youtubeId") as string | null)?.trim() ?? ""
+  );
   const venue =
     (formData.get("venue") as string | null)?.trim() || null;
   const description =
@@ -78,8 +96,15 @@ export async function updateVideo(
   prevState: ActionState,
   formData: FormData
 ): Promise<ActionState> {
+  const session = await getSession();
+  if (!session) {
+    return { error: "Unauthorized" };
+  }
+
   const title = (formData.get("title") as string | null)?.trim() ?? "";
-  const youtubeId = (formData.get("youtubeId") as string | null)?.trim() ?? "";
+  const youtubeId = sanitizeYoutubeId(
+    (formData.get("youtubeId") as string | null)?.trim() ?? ""
+  );
   const venue =
     (formData.get("venue") as string | null)?.trim() || null;
   const description =
@@ -117,6 +142,11 @@ export async function updateVideo(
 }
 
 export async function deleteVideo(id: number) {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   await prisma.video.delete({ where: { id } });
   revalidatePath("/admin/videos");
   revalidatePath("/media");
@@ -124,6 +154,11 @@ export async function deleteVideo(id: number) {
 }
 
 export async function reorderVideos(orderedIds: number[]) {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   await Promise.all(
     orderedIds.map((id, index) =>
       prisma.video.update({

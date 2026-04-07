@@ -1,9 +1,15 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
 export async function updateBiography(formData: FormData) {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   const shortBio = formData.get("shortBio") as string;
   const fullBio = JSON.parse(formData.get("fullBio") as string);
   const sections = JSON.parse(formData.get("sections") as string);

@@ -1,6 +1,7 @@
 "use server";
 
 import { prisma } from "@/lib/prisma";
+import { getSession } from "@/lib/auth";
 import { processAndSavePhoto, deletePhotoFiles } from "@/lib/image-processing";
 import { revalidatePath } from "next/cache";
 
@@ -21,6 +22,11 @@ function revalidateAll() {
 export async function uploadPhoto(
   formData: FormData
 ): Promise<{ error?: string; success?: boolean }> {
+  const session = await getSession();
+  if (!session) {
+    return { error: "Unauthorized" };
+  }
+
   const file = formData.get("file") as File | null;
 
   if (!file || file.size === 0) {
@@ -81,6 +87,11 @@ export async function uploadPhoto(
 }
 
 export async function deletePhoto(id: number): Promise<void> {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   const photo = await prisma.photo.findUnique({ where: { id } });
   if (!photo) return;
 
@@ -94,6 +105,11 @@ export async function updatePhotoMeta(
   id: number,
   formData: FormData
 ): Promise<{ error?: string; success?: boolean }> {
+  const session = await getSession();
+  if (!session) {
+    return { error: "Unauthorized" };
+  }
+
   const altText = (formData.get("altText") as string | null)?.trim() ?? "";
   const objectPosition =
     (formData.get("objectPosition") as string | null)?.trim() ?? "center center";
@@ -112,6 +128,11 @@ export async function updatePhotoMeta(
 }
 
 export async function reorderPhotos(orderedIds: number[]): Promise<void> {
+  const session = await getSession();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
   await Promise.all(
     orderedIds.map((id, index) =>
       prisma.photo.update({
