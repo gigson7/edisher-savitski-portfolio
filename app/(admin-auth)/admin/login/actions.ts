@@ -22,7 +22,13 @@ export async function loginAction(
     return { error: "Password is required." };
   }
 
-  const result = await login(email.trim(), password);
+  let result;
+  try {
+    result = await login(email.trim(), password);
+  } catch (e) {
+    console.error("[LOGIN] Error:", e);
+    return { error: "An error occurred. Please try again." };
+  }
 
   if (!result.success) {
     return { error: result.error ?? "Invalid email or password." };
