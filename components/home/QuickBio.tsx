@@ -2,11 +2,13 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { getBiography } from "@/lib/data";
+import { biography as staticBiography } from "@/data/biography";
 import { Button } from "@/components/ui/Button";
 import { Award, Music, GraduationCap, Users } from "lucide-react";
 
 export async function QuickBio() {
-  const biography = await getBiography();
+  const dbBio = await getBiography();
+  const biography = dbBio || staticBiography;
   const highlights = [
     {
       icon: Music,

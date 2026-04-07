@@ -3,10 +3,14 @@ import { performances as staticPerformances } from "@/data/performances";
 import { videos as staticVideos, getFeaturedVideos as getStaticFeaturedVideos } from "@/data/videos";
 import { biography as staticBiography } from "@/data/biography";
 
+let prismaFailed = false;
+
 function getPrisma() {
+  if (prismaFailed || !process.env.DATABASE_URL) return null;
   try {
     return require("./prisma").prisma;
   } catch {
+    prismaFailed = true;
     return null;
   }
 }
