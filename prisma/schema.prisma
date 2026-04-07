@@ -1,8 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../lib/generated/prisma"
@@ -10,4 +8,107 @@ generator client {
 
 datasource db {
   provider = "mysql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum PerformanceType {
+  solo
+  chamber
+  orchestra
+  masterclass
+}
+
+// ─── Models ──────────────────────────────────────────────────────────────────
+
+model AdminUser {
+  id           Int                  @id @default(autoincrement())
+  email        String               @unique
+  passwordHash String               @map("password_hash")
+  name         String
+  createdAt    DateTime             @default(now()) @map("created_at")
+  updatedAt    DateTime             @updatedAt @map("updated_at")
+
+  passwordResetTokens PasswordResetToken[]
+
+  @@map("admin_users")
+}
+
+model PasswordResetToken {
+  id          Int       @id @default(autoincrement())
+  tokenHash   String    @unique @map("token_hash")
+  adminUserId Int       @map("admin_user_id")
+  expiresAt   DateTime  @map("expires_at")
+  used        Boolean   @default(false)
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  adminUser AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+
+  @@index([adminUserId, used])
+  @@map("password_reset_tokens")
+}
+
+model Performance {
+  id            Int             @id @default(autoincrement())
+  title         String
+  date          DateTime
+  type          PerformanceType
+  venue         String
+  location      String
+  country       String
+  organization  String?
+  collaborators Json            @default("[]")
+  repertoire    Json            @default("[]")
+  isFeatured    Boolean         @default(false) @map("is_featured")
+  createdAt     DateTime        @default(now()) @map("created_at")
+  updatedAt     DateTime        @updatedAt @map("updated_at")
+
+  @@index([date])
+  @@index([isFeatured])
+  @@map("performances")
+}
+
+model Video {
+  id              Int       @id @default(autoincrement())
+  youtubeId       String    @unique @map("youtube_id")
+  title           String
+  description     String?   @db.Text
+  performanceDate DateTime? @map("performance_date")
+  venue           String?
+  repertoire      Json      @default("[]")
+  thumbnailUrl    String?   @map("thumbnail_url")
+  isFeatured      Boolean   @default(false) @map("is_featured")
+  sortOrder       Int       @default(0) @map("sort_order")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  @@index([sortOrder])
+  @@map("videos")
+}
+
+model Photo {
+  id             Int      @id @default(autoincrement())
+  filename       String   @unique
+  altText        String   @map("alt_text")
+  objectPosition String   @default("center center") @map("object_position")
+  sortOrder      Int      @default(0) @map("sort_order")
+  isFeatured     Boolean  @default(false) @map("is_featured")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  @@index([sortOrder])
+  @@map("photos")
+}
+
+model Biography {
+  id           Int      @id @default(autoincrement())
+  shortBio     String   @db.Text @map("short_bio")
+  fullBio      Json     @map("full_bio")
+  sections     Json     @default("[]")
+  highlights   Json     @default("[]")
+  venues       Json
+  testimonials Json     @default("[]")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("biography")
 }
