@@ -11,7 +11,7 @@ export default async function VideosPage() {
 
   try {
     videos = await prisma.video.findMany({
-      orderBy: { sortOrder: "asc" },
+      orderBy: { createdAt: "desc" },
     });
   } catch {
     // DB not available in build/preview — render empty state

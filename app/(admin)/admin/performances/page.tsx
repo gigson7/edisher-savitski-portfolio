@@ -223,24 +223,7 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
           ))}
         </select>
 
-        {/* Type */}
-        <select
-          name="type"
-          defaultValue={params.type ?? ""}
-          className="px-3 py-2 border border-neutral-200 rounded-lg text-sm bg-white text-neutral-800 focus:outline-none focus:ring-2"
-          style={{ "--tw-ring-color": "#8d7336" } as React.CSSProperties}
-        >
-          <option value="">All types</option>
-          {(
-            ["solo", "chamber", "orchestra", "masterclass"] as PerformanceType[]
-          ).map((t) => (
-            <option key={t} value={t}>
-              {capitalize(t)}
-            </option>
-          ))}
-        </select>
-
-        <button
+<button
           type="submit"
           className="px-4 py-2 border border-neutral-200 rounded-lg text-sm font-medium bg-white text-neutral-700 hover:bg-neutral-50 transition-colors"
         >
@@ -285,9 +268,6 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
                   <th className="text-left px-4 py-3 font-medium text-neutral-500">
                     Location
                   </th>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-500">
-                    Type
-                  </th>
                   <th className="text-right px-4 py-3 font-medium text-neutral-500">
                     Actions
                   </th>
@@ -330,11 +310,6 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
                       <td className="px-4 py-3 text-neutral-600">{p.venue}</td>
                       <td className="px-4 py-3 text-neutral-600">
                         {p.location}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className="px-2 py-0.5 rounded bg-neutral-100 text-neutral-600 text-xs font-medium">
-                          {capitalize(p.type)}
-                        </span>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center justify-end gap-2">

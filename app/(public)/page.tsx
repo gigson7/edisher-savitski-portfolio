@@ -3,7 +3,7 @@ import { HeroSection } from "@/components/home/HeroSection";
 import { QuickBio } from "@/components/home/QuickBio";
 import { FeaturedPerformances } from "@/components/home/FeaturedPerformances";
 import { FeaturedMedia } from "@/components/home/FeaturedMedia";
-import { getFeaturedVideos, getFeaturedPhotos } from "@/lib/data";
+import { getFeaturedVideos, getPhotos } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 export default async function Home() {
   const [featuredVideos, featuredPhotos] = await Promise.all([
     getFeaturedVideos(),
-    getFeaturedPhotos(),
+    getPhotos(),
   ]);
 
   return (

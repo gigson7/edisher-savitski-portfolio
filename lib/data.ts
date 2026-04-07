@@ -24,14 +24,14 @@ export async function getFeaturedPerformances() {
 
 export async function getVideos() {
   return prisma.video.findMany({
-    orderBy: { sortOrder: "asc" },
+    orderBy: { createdAt: "desc" },
   });
 }
 
 export async function getFeaturedVideos() {
   return prisma.video.findMany({
     where: { isFeatured: true },
-    orderBy: { sortOrder: "asc" },
+    orderBy: { createdAt: "desc" },
   });
 }
 
