@@ -5,7 +5,7 @@ Professional portfolio website for Dr. Edisher Savitski, an award-winning concer
 
 **Live Site:** https://edisher-savitski-portfolio.vercel.app
 **Repository:** https://github.com/gigson7/edisher-savitski-portfolio
-**Hosting:** Vercel (automatic deployments from main branch)
+**Hosting:** Hostinger (Node.js + MySQL)
 
 ## Tech Stack
 - **Framework:** Next.js 15.5.12 (App Router)
@@ -373,8 +373,77 @@ sips -Z 1200 input.jpg --out large.jpg
 - Performance monitoring
 - A/B testing
 
+## Admin Dashboard
+
+### Overview
+Admin panel at `/admin/*` for managing all site content. Single admin user with email/password auth.
+
+### Admin Routes
+| Route | Purpose |
+|-------|---------|
+| `/admin/login` | Login page |
+| `/admin/forgot-password` | Request password reset email |
+| `/admin/reset-password?token=...` | Set new password |
+| `/admin` | Dashboard home (overview cards) |
+| `/admin/performances` | List, search, filter performances |
+| `/admin/performances/new` | Create performance |
+| `/admin/performances/[id]/edit` | Edit performance |
+| `/admin/videos` | List, reorder videos |
+| `/admin/videos/new` | Add video |
+| `/admin/videos/[id]/edit` | Edit video |
+| `/admin/photos` | Upload, manage, reorder photos |
+| `/admin/biography` | Edit all biography content |
+
+### Database
+- **ORM:** Prisma 7 with `@prisma/adapter-mariadb`
+- **Provider:** MySQL (Hostinger)
+- **Tables:** admin_users, password_reset_tokens, performances, videos, photos, biography
+- **Schema:** `prisma/schema.prisma`
+- **Client singleton:** `lib/prisma.ts`
+- **Generated client:** `lib/generated/prisma/`
+
+### Auth System
+- JWT sessions via HTTP-only cookie (`admin-session`, 7-day expiry)
+- Rolling refresh in middleware (renews at 50% lifetime)
+- Password hashing: bcryptjs (cost 12)
+- Password reset: SHA-256 token hash, 1-hour expiry, single-use
+- Middleware: `middleware.ts` protects all `/admin/*` except login/reset pages
+
+### Route Groups
+```
+app/
+  (public)/      ← public pages with Header/Footer layout
+  (admin)/       ← protected admin pages with sidebar layout
+  (admin-auth)/  ← auth pages (login/reset) with no layout chrome
+```
+
+### Key Files
+- `lib/auth.ts` — JWT, bcrypt, session, password reset
+- `lib/data.ts` — Data access layer (public pages)
+- `lib/prisma.ts` — Prisma client singleton
+- `lib/image-processing.ts` — Sharp pipeline (4 WebP sizes)
+- `middleware.ts` — Auth middleware with session refresh
+- `prisma/seed.ts` — One-time data migration from static files
+
+### Commands
+```bash
+npx prisma generate          # Generate Prisma client
+npx prisma migrate dev       # Run migrations locally
+npx prisma migrate deploy    # Deploy migrations to production
+npx prisma db seed           # Seed DB with existing static data (one-time)
+npx prisma studio            # Browse DB in browser
+```
+
+### Environment Variables (admin-specific)
+```
+DATABASE_URL=mysql://user:pass@host:3306/dbname
+JWT_SECRET=random-64-char-string
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=initial-password
+```
+
 ---
 
-**Last Updated:** February 10, 2026
-**Version:** 1.1.0
+**Last Updated:** April 7, 2026
+**Version:** 2.0.0
 **Maintainer:** Dr. Edisher Savitski with Claude
