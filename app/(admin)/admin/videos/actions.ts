@@ -153,21 +153,3 @@ export async function deleteVideo(id: number) {
   revalidatePath("/");
 }
 
-export async function reorderVideos(orderedIds: number[]) {
-  const session = await getSession();
-  if (!session) {
-    throw new Error("Unauthorized");
-  }
-
-  await Promise.all(
-    orderedIds.map((id, index) =>
-      prisma.video.update({
-        where: { id },
-        data: { sortOrder: index + 1 },
-      })
-    )
-  );
-  revalidatePath("/admin/videos");
-  revalidatePath("/media");
-  revalidatePath("/");
-}

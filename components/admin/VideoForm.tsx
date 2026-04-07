@@ -178,24 +178,6 @@ export function VideoForm({ video, action }: Props) {
             )}
           </div>
 
-          {/* Performance Date */}
-          <div>
-            <label
-              htmlFor="performanceDate"
-              className="block text-sm font-medium text-neutral-700 mb-1.5"
-            >
-              Performance Date
-            </label>
-            <input
-              id="performanceDate"
-              name="performanceDate"
-              type="text"
-              defaultValue={video?.performanceDate ?? ""}
-              placeholder="e.g. March 2024"
-              className="w-full px-3 py-2 border border-neutral-200 rounded-lg text-sm bg-white text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-[#8d7336]"
-            />
-          </div>
-
           {/* Venue */}
           <div>
             <label
