@@ -19,26 +19,39 @@ export function getPrisma(): PrismaClientType {
     throw new Error("DATABASE_URL environment variable is not set");
   }
 
-  // Try creating adapter with explicit pool options for Hostinger compatibility
-  let adapter;
-  try {
-    const mariadb = require("mariadb");
-    const dbUrl = new URL(url);
-    const pool = mariadb.createPool({
-      host: dbUrl.hostname || "localhost",
-      port: parseInt(dbUrl.port || "3306"),
-      user: decodeURIComponent(dbUrl.username),
-      password: decodeURIComponent(dbUrl.password),
-      database: dbUrl.pathname.slice(1),
-      connectionLimit: 2,
-      minimumIdle: 1,
-      connectTimeout: 10000,
+  const mariadb = require("mariadb");
+  const dbUrl = new URL(url);
+
+  const host = dbUrl.hostname || "localhost";
+  const port = parseInt(dbUrl.port || "3306");
+  const user = decodeURIComponent(dbUrl.username);
+  const password = decodeURIComponent(dbUrl.password);
+  const database = dbUrl.pathname.slice(1);
+
+  console.log(`[PRISMA] Connecting to MySQL: host=${host} port=${port} user=${user} db=${database}`);
+
+  // Test raw connection first
+  mariadb.createConnection({ host, port, user, password, database, connectTimeout: 5000 })
+    .then((conn: { end: () => void }) => {
+      console.log("[PRISMA] ✓ Direct MySQL connection successful!");
+      conn.end();
+    })
+    .catch((err: Error) => {
+      console.error("[PRISMA] ✗ Direct MySQL connection FAILED:", err.message);
     });
-    adapter = new PrismaMariaDb(pool);
-  } catch (e) {
-    console.error("[PRISMA] Failed to create pool with explicit options, falling back to URL:", e);
-    adapter = new PrismaMariaDb(url);
-  }
+
+  const pool = mariadb.createPool({
+    host,
+    port,
+    user,
+    password,
+    database,
+    connectionLimit: 2,
+    minimumIdle: 0,
+    connectTimeout: 10000,
+    acquireTimeout: 10000,
+  });
+  const adapter = new PrismaMariaDb(pool);
   const client = new PrismaClient({ adapter });
 
   if (process.env.NODE_ENV !== "production") {
