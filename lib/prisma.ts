@@ -18,10 +18,27 @@ export function getPrisma(): PrismaClientType {
   if (!url) {
     throw new Error("DATABASE_URL environment variable is not set");
   }
-  const dbUrl = new URL(url);
-  dbUrl.searchParams.set("connectionLimit", "2");
-  dbUrl.searchParams.set("minimumIdle", "1");
-  const adapter = new PrismaMariaDb(dbUrl.toString());
+
+  // Try creating adapter with explicit pool options for Hostinger compatibility
+  let adapter;
+  try {
+    const mariadb = require("mariadb");
+    const dbUrl = new URL(url);
+    const pool = mariadb.createPool({
+      host: dbUrl.hostname || "localhost",
+      port: parseInt(dbUrl.port || "3306"),
+      user: decodeURIComponent(dbUrl.username),
+      password: decodeURIComponent(dbUrl.password),
+      database: dbUrl.pathname.slice(1),
+      connectionLimit: 2,
+      minimumIdle: 1,
+      connectTimeout: 10000,
+    });
+    adapter = new PrismaMariaDb(pool);
+  } catch (e) {
+    console.error("[PRISMA] Failed to create pool with explicit options, falling back to URL:", e);
+    adapter = new PrismaMariaDb(url);
+  }
   const client = new PrismaClient({ adapter });
 
   if (process.env.NODE_ENV !== "production") {
