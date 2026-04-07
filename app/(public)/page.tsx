@@ -27,10 +27,16 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const [featuredVideos, featuredPhotos] = await Promise.all([
-    getFeaturedVideos(),
-    getPhotos(),
-  ]);
+  let featuredVideos: Awaited<ReturnType<typeof getFeaturedVideos>> = [];
+  let featuredPhotos: Awaited<ReturnType<typeof getPhotos>> = [];
+  try {
+    [featuredVideos, featuredPhotos] = await Promise.all([
+      getFeaturedVideos(),
+      getPhotos(),
+    ]);
+  } catch (err) {
+    console.error("[HOME] Database error:", err);
+  }
 
   return (
     <>
