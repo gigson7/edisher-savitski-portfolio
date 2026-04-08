@@ -8,7 +8,7 @@ import { config } from "dotenv";
 config({ path: ".env.local" });
 
 import { PrismaClient } from "../lib/generated/prisma/client";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaNeonHttp } from "@prisma/adapter-neon";
 import * as bcrypt from "bcryptjs";
 
 // We import from the data files directly (TypeScript via tsx).
@@ -22,7 +22,7 @@ import { biography } from "../data/biography";
 function createClient(): PrismaClient {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL is not set");
-  const adapter = new PrismaMariaDb(url);
+  const adapter = new PrismaNeonHttp(url, {});
   return new PrismaClient({ adapter });
 }
 
