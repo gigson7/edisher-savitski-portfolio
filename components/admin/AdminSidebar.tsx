@@ -2,58 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Calendar,
-  Video,
-  Image,
-  FileText,
-  LogOut,
-} from "lucide-react";
-
-const navItems = [
-  {
-    href: "/admin",
-    label: "Dashboard",
-    icon: LayoutDashboard,
-    exact: true,
-  },
-  {
-    href: "/admin/performances",
-    label: "Performances",
-    icon: Calendar,
-    exact: false,
-  },
-  {
-    href: "/admin/videos",
-    label: "Videos",
-    icon: Video,
-    exact: false,
-  },
-  {
-    href: "/admin/photos",
-    label: "Photos",
-    icon: Image,
-    exact: false,
-  },
-  {
-    href: "/admin/biography",
-    label: "Biography",
-    icon: FileText,
-    exact: false,
-  },
-];
+import { LogOut } from "lucide-react";
+import { adminNavItems, isAdminNavActive } from "@/lib/admin-nav";
 
 export function AdminSidebar() {
   const pathname = usePathname();
 
-  function isActive(href: string, exact: boolean): boolean {
-    if (exact) return pathname === href;
-    return pathname === href || pathname.startsWith(href + "/");
-  }
-
   return (
-    <aside className="w-64 min-h-screen bg-neutral-900 flex flex-col">
+    <aside className="hidden lg:flex w-64 min-h-screen bg-neutral-900 flex-col">
       {/* Brand */}
       <div className="px-6 py-6 border-b border-neutral-800">
         <h1
@@ -72,8 +28,8 @@ export function AdminSidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1">
-        {navItems.map(({ href, label, icon: Icon, exact }) => {
-          const active = isActive(href, exact);
+        {adminNavItems.map(({ href, label, icon: Icon, exact }) => {
+          const active = isAdminNavActive(pathname, href, exact);
           return (
             <Link
               key={href}

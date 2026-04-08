@@ -118,7 +118,7 @@ export function PerformanceForm({ performance, action }: Props) {
     : "";
 
   return (
-    <div className="bg-white rounded-xl border border-neutral-200 p-8 max-w-3xl shadow-sm">
+    <div className="bg-white rounded-xl border border-neutral-200 p-4 sm:p-6 md:p-8 max-w-3xl shadow-sm">
       {state?.error && (
         <div className="mb-6 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
           {state.error}
@@ -272,11 +272,17 @@ export function PerformanceForm({ performance, action }: Props) {
         </div>
 
         {/* Actions */}
-        <div className="mt-8 flex items-center gap-4">
+        <div className="mt-8 flex flex-col-reverse sm:flex-row sm:items-center gap-3 sm:gap-4">
+          <Link
+            href="/admin/performances"
+            className="text-sm text-neutral-500 hover:text-neutral-700 transition-colors text-center sm:text-left sm:order-2"
+          >
+            Cancel
+          </Link>
           <button
             type="submit"
             disabled={isPending}
-            className="px-6 py-2.5 rounded-lg text-sm font-medium text-white transition-colors disabled:opacity-60"
+            className="px-6 py-2.5 rounded-lg text-sm font-medium text-white transition-colors disabled:opacity-60 sm:order-1"
             style={{ backgroundColor: "#8d7336" }}
           >
             {isPending
@@ -285,12 +291,6 @@ export function PerformanceForm({ performance, action }: Props) {
               ? "Update Performance"
               : "Create Performance"}
           </button>
-          <Link
-            href="/admin/performances"
-            className="text-sm text-neutral-500 hover:text-neutral-700 transition-colors"
-          >
-            Cancel
-          </Link>
         </div>
       </form>
     </div>

@@ -144,7 +144,7 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
   return (
     <div>
       {/* Page Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1
             className="text-2xl font-bold text-neutral-900"
@@ -160,7 +160,7 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
         </div>
         <Link
           href="/admin/performances/new"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors w-full sm:w-auto"
           style={{ backgroundColor: "#8d7336" }}
         >
           <Plus className="w-4 h-4" />
@@ -193,7 +193,7 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
       <form
         method="GET"
         action="/admin/performances"
-        className="mb-5 flex flex-wrap gap-3 items-center"
+        className="mb-5 flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:items-center"
       >
         {/* Preserve tab */}
         <input type="hidden" name="tab" value={tab} />
@@ -204,7 +204,7 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
           name="search"
           defaultValue={params.search ?? ""}
           placeholder="Search title, venue, location…"
-          className="px-3 py-2 border border-neutral-200 rounded-lg text-sm bg-white text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 w-64"
+          className="px-3 py-2 border border-neutral-200 rounded-lg text-sm bg-white text-neutral-800 placeholder-neutral-400 focus:outline-none focus:ring-2 w-full sm:w-64"
           style={{ "--tw-ring-color": "#8d7336" } as React.CSSProperties}
         />
 
@@ -212,7 +212,7 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
         <select
           name="year"
           defaultValue={params.year ?? ""}
-          className="px-3 py-2 border border-neutral-200 rounded-lg text-sm bg-white text-neutral-800 focus:outline-none focus:ring-2"
+          className="px-3 py-2 border border-neutral-200 rounded-lg text-sm bg-white text-neutral-800 focus:outline-none focus:ring-2 w-full sm:w-auto"
           style={{ "--tw-ring-color": "#8d7336" } as React.CSSProperties}
         >
           <option value="">All years</option>
@@ -223,127 +223,189 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
           ))}
         </select>
 
-<button
-          type="submit"
-          className="px-4 py-2 border border-neutral-200 rounded-lg text-sm font-medium bg-white text-neutral-700 hover:bg-neutral-50 transition-colors"
-        >
-          Filter
-        </button>
-
-        {(params.search || params.year || params.type) && (
-          <Link
-            href={buildUrl({
-              search: undefined,
-              year: undefined,
-              type: undefined,
-              page: "1",
-            })}
-            className="text-sm text-neutral-500 hover:text-neutral-700"
+        <div className="flex items-center gap-3">
+          <button
+            type="submit"
+            className="px-4 py-2 border border-neutral-200 rounded-lg text-sm font-medium bg-white text-neutral-700 hover:bg-neutral-50 transition-colors flex-1 sm:flex-none"
           >
-            Clear filters
-          </Link>
-        )}
+            Filter
+          </button>
+
+          {(params.search || params.year || params.type) && (
+            <Link
+              href={buildUrl({
+                search: undefined,
+                year: undefined,
+                type: undefined,
+                page: "1",
+              })}
+              className="text-sm text-neutral-500 hover:text-neutral-700 whitespace-nowrap"
+            >
+              Clear filters
+            </Link>
+          )}
+        </div>
       </form>
 
-      {/* Table Card */}
+      {/* Results — table on desktop, card list on mobile */}
       <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden shadow-sm">
         {performances.length === 0 ? (
           <div className="py-16 text-center text-neutral-400 text-sm">
             No performances found.
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-neutral-50 border-b border-neutral-200">
-                  <th className="text-left px-4 py-3 font-medium text-neutral-500">
-                    Date
-                  </th>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-500">
-                    Title
-                  </th>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-500">
-                    Venue
-                  </th>
-                  <th className="text-left px-4 py-3 font-medium text-neutral-500">
-                    Location
-                  </th>
-                  <th className="text-right px-4 py-3 font-medium text-neutral-500">
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-neutral-100">
-                {performances.map((p) => {
-                  const isUpcoming = p.date >= new Date();
-                  return (
-                    <tr
-                      key={p.id}
-                      className="hover:bg-neutral-50 transition-colors"
-                    >
-                      <td className="px-4 py-3 whitespace-nowrap text-neutral-700">
-                        {formatDate(p.date)}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-medium text-neutral-900">
-                            {p.title}
-                          </span>
-                          {isUpcoming && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700">
-                              Upcoming
+          <>
+            {/* Desktop table */}
+            <div className="hidden lg:block overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-neutral-50 border-b border-neutral-200">
+                    <th className="text-left px-4 py-3 font-medium text-neutral-500">
+                      Date
+                    </th>
+                    <th className="text-left px-4 py-3 font-medium text-neutral-500">
+                      Title
+                    </th>
+                    <th className="text-left px-4 py-3 font-medium text-neutral-500">
+                      Venue
+                    </th>
+                    <th className="text-left px-4 py-3 font-medium text-neutral-500">
+                      Location
+                    </th>
+                    <th className="text-right px-4 py-3 font-medium text-neutral-500">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-neutral-100">
+                  {performances.map((p) => {
+                    const isUpcoming = p.date >= new Date();
+                    return (
+                      <tr
+                        key={p.id}
+                        className="hover:bg-neutral-50 transition-colors"
+                      >
+                        <td className="px-4 py-3 whitespace-nowrap text-neutral-700">
+                          {formatDate(p.date)}
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="font-medium text-neutral-900">
+                              {p.title}
                             </span>
-                          )}
-                          {p.isFeatured && (
-                            <span
-                              className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
-                              style={{
-                                backgroundColor: "#f5f1e8",
-                                color: "#8d7336",
-                              }}
+                            {isUpcoming && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700">
+                                Upcoming
+                              </span>
+                            )}
+                            {p.isFeatured && (
+                              <span
+                                className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
+                                style={{
+                                  backgroundColor: "#f5f1e8",
+                                  color: "#8d7336",
+                                }}
+                              >
+                                Featured
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-4 py-3 text-neutral-600">{p.venue}</td>
+                        <td className="px-4 py-3 text-neutral-600">
+                          {p.location}
+                        </td>
+                        <td className="px-4 py-3">
+                          <div className="flex items-center justify-end gap-2">
+                            <Link
+                              href={`/admin/performances/${p.id}/edit`}
+                              className="p-1.5 rounded text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors"
+                              title="Edit"
                             >
-                              Featured
-                            </span>
-                          )}
+                              <Pencil className="w-4 h-4" />
+                            </Link>
+                            <DeletePerformanceButton
+                              id={p.id}
+                              title={p.title}
+                            />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile card list */}
+            <ul className="lg:hidden divide-y divide-neutral-100">
+              {performances.map((p) => {
+                const isUpcoming = p.date >= new Date();
+                return (
+                  <li key={p.id} className="p-4">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs text-neutral-500 mb-1">
+                          {formatDate(p.date)}
                         </div>
-                      </td>
-                      <td className="px-4 py-3 text-neutral-600">{p.venue}</td>
-                      <td className="px-4 py-3 text-neutral-600">
-                        {p.location}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex items-center justify-end gap-2">
-                          <Link
-                            href={`/admin/performances/${p.id}/edit`}
-                            className="p-1.5 rounded text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 transition-colors"
-                            title="Edit"
-                          >
-                            <Pencil className="w-4 h-4" />
-                          </Link>
-                          <DeletePerformanceButton
-                            id={p.id}
-                            title={p.title}
-                          />
+                        <h3 className="font-medium text-neutral-900 text-sm leading-snug">
+                          {p.title}
+                        </h3>
+                        <div className="mt-1 text-xs text-neutral-600">
+                          {p.venue}
                         </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                        <div className="text-xs text-neutral-500">
+                          {p.location}
+                        </div>
+                        {(isUpcoming || p.isFeatured) && (
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {isUpcoming && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-100 text-blue-700">
+                                Upcoming
+                              </span>
+                            )}
+                            {p.isFeatured && (
+                              <span
+                                className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium"
+                                style={{
+                                  backgroundColor: "#f5f1e8",
+                                  color: "#8d7336",
+                                }}
+                              >
+                                Featured
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <Link
+                          href={`/admin/performances/${p.id}/edit`}
+                          className="p-2 rounded text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100 transition-colors"
+                          title="Edit"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </Link>
+                        <DeletePerformanceButton id={p.id} title={p.title} />
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </>
         )}
 
         {/* Pagination */}
         {total > 0 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-neutral-200 bg-neutral-50">
-            <p className="text-sm text-neutral-500">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-3 border-t border-neutral-200 bg-neutral-50">
+            <p className="text-xs sm:text-sm text-neutral-500">
               Showing {from}–{to} of {total}
             </p>
             <div className="flex gap-2">
               <Link
                 href={buildUrl({ page: String(page - 1) })}
-                className={`px-3 py-1.5 rounded border text-sm font-medium transition-colors ${
+                className={`flex-1 sm:flex-none text-center px-3 py-1.5 rounded border text-sm font-medium transition-colors ${
                   page <= 1
                     ? "border-neutral-200 text-neutral-300 pointer-events-none"
                     : "border-neutral-200 text-neutral-700 hover:bg-neutral-100"
@@ -354,7 +416,7 @@ export default async function PerformancesPage({ searchParams }: PageProps) {
               </Link>
               <Link
                 href={buildUrl({ page: String(page + 1) })}
-                className={`px-3 py-1.5 rounded border text-sm font-medium transition-colors ${
+                className={`flex-1 sm:flex-none text-center px-3 py-1.5 rounded border text-sm font-medium transition-colors ${
                   page >= totalPages
                     ? "border-neutral-200 text-neutral-300 pointer-events-none"
                     : "border-neutral-200 text-neutral-700 hover:bg-neutral-100"

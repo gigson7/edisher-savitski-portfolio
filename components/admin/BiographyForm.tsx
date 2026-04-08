@@ -214,7 +214,7 @@ export function BiographyForm(props: Props) {
   return (
     <div className="space-y-6">
       {/* ── Sticky Save Bar ─────────────────────────────────────────────── */}
-      <div className="sticky top-0 z-10 bg-neutral-50/90 backdrop-blur-sm border-b border-neutral-200 -mx-6 px-6 py-3 flex items-center justify-between">
+      <div className="sticky top-0 z-10 bg-neutral-50/90 backdrop-blur-sm border-b border-neutral-200 -mx-4 px-4 sm:-mx-6 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2">
         <div className="flex items-center gap-3">
           <button
             type="button"

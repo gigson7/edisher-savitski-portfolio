@@ -20,7 +20,7 @@ export default async function VideosPage() {
   return (
     <div>
       {/* Page Header */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1
             className="text-2xl font-bold text-neutral-900"
@@ -36,7 +36,7 @@ export default async function VideosPage() {
         </div>
         <Link
           href="/admin/videos/new"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors"
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-white transition-colors w-full sm:w-auto"
           style={{ backgroundColor: "#8d7336" }}
         >
           <Plus className="w-4 h-4" />
