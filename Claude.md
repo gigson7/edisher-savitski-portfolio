@@ -3,9 +3,10 @@
 ## Project Overview
 Professional portfolio website for Dr. Edisher Savitski, an award-winning concert pianist, Associate Professor at University of Alabama, and Artistic Director of Toradze International Music Festival.
 
-**Live Site:** https://edisher-savitski-portfolio.vercel.app
+**Live Site:** https://edishersavitski.com
 **Repository:** https://github.com/gigson7/edisher-savitski-portfolio
-**Hosting:** Hostinger (Node.js + MySQL)
+**Hosting:** Hostinger shared (Node.js) — auto-deploys from GitHub `main`. **NOT Vercel.**
+**Database:** Neon Postgres (migrated from Hostinger MySQL — see "Critical: Hostinger nproc Trap" below)
 
 ## Tech Stack
 - **Framework:** Next.js 15.5.12 (App Router)
@@ -184,44 +185,52 @@ Professional portfolio website for Dr. Edisher Savitski, an award-winning concer
 
 ## Environment Variables
 
-### Vercel Production
+### Hostinger Production (set in hPanel UI → Node.js → Edit Application → Environment Variables)
 ```
-NEXT_PUBLIC_SITE_URL=https://edisher-savitski-portfolio.vercel.app
-NEXT_PUBLIC_FORMSPREE_ENDPOINT=[formspree_endpoint_if_used]
+DATABASE_URL=postgresql://...neon.tech/neondb?sslmode=require&channel_binding=require
+JWT_SECRET=<64-char random string>
+ADMIN_EMAIL=piano@edishersavitski.com
+ADMIN_PASSWORD=<set in hPanel only>
+SMTP_HOST=...
+SMTP_PORT=...
+SMTP_USER=...
+SMTP_PASS=...
+SMTP_FROM=noreply@edishersavitski.com
+NEXT_PUBLIC_SITE_URL=https://edishersavitski.com
 ```
 
+**Important:** Hostinger wipes SSH-deployed `.env` files on every deploy. Always set env vars through the hPanel UI, NOT by uploading files.
+
 ### Local Development
-```
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
+`.env.local` (gitignored) — same keys, with the same Neon DATABASE_URL for testing.
 
 ## Build & Deployment
 
 ### Local Development
 ```bash
 npm run dev          # Start dev server (usually port 3000, may use 3001 if 3000 busy)
-npm run build        # Production build
+npm run build        # Production build (runs prisma generate first)
 npm start            # Run production build
 ```
 
 ### Build Configuration
-- **Webpack:** Used instead of Turbopack (turbo: undefined in next.config.ts)
-- **Reason:** Next.js 16.x has Turbopack bugs, using stable 15.5.12
-- **Build output:** All pages static (SSG)
+- **Build command:** `prisma generate && next build` (Prisma client is regenerated every build)
+- **Webpack:** Used instead of Turbopack (`experimental.turbo: undefined` in next.config.ts) — Next.js 16.x Turbopack has dependency tracking bugs
+- **Images:** `images: { unoptimized: true }` in next.config.ts — **DO NOT remove**, this stops sharp from spawning native threads (see nproc trap below)
+- **Build output:** Mix of static (SSG) public pages + dynamic admin pages (`force-dynamic`)
 
 ### Deployment Workflow
 1. Push to `main` branch on GitHub
-2. Vercel automatically detects push
-3. Runs `npm run build`
-4. Deploys to production (~2-3 minutes)
-5. Live at: https://edisher-savitski-portfolio.vercel.app
+2. Hostinger auto-deploys from GitHub via its Git integration
+3. Build runs on Hostinger (~2-3 minutes)
+4. Live at: https://edishersavitski.com
 
-### Vercel Settings
-- **Framework:** Next.js (auto-detected)
-- **Build Command:** `npm run build`
-- **Output Directory:** `.next`
-- **Node Version:** Latest stable
-- **Auto-deployments:** Enabled for main branch
+### Hostinger Settings
+- **Application root:** project directory under home
+- **Application URL:** edishersavitski.com
+- **Node version:** 22.x (24.x also works; never below 20.x)
+- **Startup file:** Next.js default (`server.js` from `next start`)
+- **Auto-deploy:** Enabled from GitHub `main` branch
 
 ## Git Workflow
 ```bash
@@ -395,12 +404,13 @@ Admin panel at `/admin/*` for managing all site content. Single admin user with 
 | `/admin/biography` | Edit all biography content |
 
 ### Database
-- **ORM:** Prisma 7 with `@prisma/adapter-mariadb`
-- **Provider:** MySQL (Hostinger)
+- **ORM:** Prisma 7 with `@prisma/adapter-neon` (`PrismaNeonHttp`)
+- **Provider:** Neon Postgres (free tier, 0.5GB) — fetch-only HTTP driver, **zero native threads**
 - **Tables:** admin_users, password_reset_tokens, performances, videos, photos, biography
-- **Schema:** `prisma/schema.prisma`
-- **Client singleton:** `lib/prisma.ts`
+- **Schema:** `prisma/schema.prisma` (provider = "postgresql")
+- **Client singleton:** `lib/prisma.ts` — lazy `Proxy` so the client is created on first property access, never at import time
 - **Generated client:** `lib/generated/prisma/`
+- **Migrations:** `prisma/migrations/` — current init is `20260408090535_init` (Postgres)
 
 ### Auth System
 - JWT sessions via HTTP-only cookie (`admin-session`, 7-day expiry)
@@ -417,33 +427,63 @@ app/
   (admin-auth)/  ← auth pages (login/reset) with no layout chrome
 ```
 
+### Mobile Responsiveness
+- `AdminSidebar` is `hidden lg:flex` — desktop only
+- `AdminMobileNav` (client component, in `AdminHeader`) renders a hamburger button + slide-in drawer with backdrop, body scroll lock, auto-close on route change
+- Shared nav items live in `lib/admin-nav.ts` so both desktop sidebar and mobile drawer use the same source
+- Page headers stack on mobile (`flex-col sm:flex-row`); action buttons are full-width on mobile
+- Performances list renders as a tap-friendly card list below `lg`, full table at `lg+`
+- Form cards use `p-4 sm:p-6 md:p-8`; form action buttons stack on mobile
+- Biography sticky save bar uses `-mx-4 sm:-mx-6` to match the layout's `p-4 sm:p-6`
+
 ### Key Files
 - `lib/auth.ts` — JWT, bcrypt, session, password reset
-- `lib/data.ts` — Data access layer (public pages)
-- `lib/prisma.ts` — Prisma client singleton
-- `lib/image-processing.ts` — Sharp pipeline (4 WebP sizes)
+- `lib/data.ts` — Data access layer for public pages, with static fallback when DB is unreachable
+- `lib/prisma.ts` — Lazy Prisma client singleton via Proxy (uses `PrismaNeonHttp`)
+- `lib/admin-nav.ts` — Shared admin nav items
+- `lib/image-processing.ts` — Sharp pipeline (4 WebP sizes) — runs only at upload time, not request time
 - `middleware.ts` — Auth middleware with session refresh
-- `prisma/seed.ts` — One-time data migration from static files
+- `prisma/seed.ts` — Reseeds static data into Neon
+- `components/admin/AdminMobileNav.tsx` — Mobile hamburger drawer
+- `components/admin/AdminSidebar.tsx` — Desktop sidebar (hidden on mobile)
 
 ### Commands
 ```bash
 npx prisma generate          # Generate Prisma client
-npx prisma migrate dev       # Run migrations locally
-npx prisma migrate deploy    # Deploy migrations to production
-npx prisma db seed           # Seed DB with existing static data (one-time)
+npx prisma migrate dev       # Create + apply new migration locally to Neon
+npx prisma migrate deploy    # Apply pending migrations (CI/production)
+npx tsx prisma/seed.ts       # Seed Neon with static data (use `tsx` directly, not `prisma db seed`, to avoid env-var loading issues)
 npx prisma studio            # Browse DB in browser
 ```
 
-### Environment Variables (admin-specific)
-```
-DATABASE_URL=mysql://user:pass@host:3306/dbname
-JWT_SECRET=random-64-char-string
-ADMIN_EMAIL=admin@example.com
-ADMIN_PASSWORD=initial-password
-```
+### Admin Credentials
+Stored only in `.env.local` (gitignored) and in Hostinger env vars. **Never commit them.**
 
 ---
 
-**Last Updated:** April 7, 2026
-**Version:** 2.0.0
+## Critical: Hostinger nproc=120 Trap
+
+**This is the most important context for this project. Read this before touching any DB-related code.**
+
+Hostinger shared hosting enforces nproc=120 (CloudLinux LVE). Any library that spawns native worker threads at module-eval or pool-creation time will SIGKILL the Node process at the OS level — Sentry can't capture it because no JS exception is thrown.
+
+**What used to crash:**
+- `mariadb` native driver (was `@prisma/adapter-mariadb`) → spawned worker threads on pool creation → SIGKILL
+- `sharp` native bindings → had to disable Next.js image optimization
+- Even `Promise.all` of multiple Prisma queries could push past the limit
+
+**What works (and must stay this way):**
+- **Database:** Neon Postgres via `@prisma/adapter-neon` → `PrismaNeonHttp(url, {})` — uses fetch() only, zero threads
+  - **Do NOT** use `PrismaNeon` (without Http) — that one wraps a WebSocket Pool which still spawns workers
+- **Prisma client:** lazy `Proxy` in `lib/prisma.ts` so nothing initializes at import time
+- **Sharp:** `images: { unoptimized: true }` in `next.config.ts` — never remove this
+- **Queries:** Sequential is safer than `Promise.all` on the dashboard
+- **No new native-binding DB drivers, ever.** If you need a new data source, it must use HTTP/fetch.
+
+If the production app crashes with no JS error in Sentry: suspect nproc/threads first.
+
+---
+
+**Last Updated:** April 8, 2026
+**Version:** 3.0.0
 **Maintainer:** Dr. Edisher Savitski with Claude
