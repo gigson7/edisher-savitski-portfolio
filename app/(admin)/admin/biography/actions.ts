@@ -17,26 +17,28 @@ export async function updateBiography(formData: FormData) {
   const venues = JSON.parse(formData.get("venues") as string);
   const testimonials = JSON.parse(formData.get("testimonials") as string);
 
-  // JSON.parse/stringify to satisfy Prisma 7's strict InputJsonValue type
-  await prisma.biography.upsert({
-    where: { id: 1 },
-    update: {
-      shortBio,
-      fullBio: JSON.parse(JSON.stringify(fullBio)),
-      sections: JSON.parse(JSON.stringify(sections)),
-      highlights: JSON.parse(JSON.stringify(highlights)),
-      venues: JSON.parse(JSON.stringify(venues)),
-      testimonials: JSON.parse(JSON.stringify(testimonials)),
-    },
-    create: {
-      shortBio,
-      fullBio: JSON.parse(JSON.stringify(fullBio)),
-      sections: JSON.parse(JSON.stringify(sections)),
-      highlights: JSON.parse(JSON.stringify(highlights)),
-      venues: JSON.parse(JSON.stringify(venues)),
-      testimonials: JSON.parse(JSON.stringify(testimonials)),
-    },
+  // JSON.parse/stringify to satisfy Prisma 7's strict InputJsonValue type.
+  // Avoid `upsert`: Prisma 7's interpreter wraps it in an interactive
+  // transaction, which the Neon HTTP adapter cannot execute.
+  const data = {
+    shortBio,
+    fullBio: JSON.parse(JSON.stringify(fullBio)),
+    sections: JSON.parse(JSON.stringify(sections)),
+    highlights: JSON.parse(JSON.stringify(highlights)),
+    venues: JSON.parse(JSON.stringify(venues)),
+    testimonials: JSON.parse(JSON.stringify(testimonials)),
+  };
+
+  const existing = await prisma.biography.findFirst({
+    orderBy: { id: "asc" },
+    select: { id: true },
   });
+
+  if (existing) {
+    await prisma.biography.update({ where: { id: existing.id }, data });
+  } else {
+    await prisma.biography.create({ data });
+  }
 
   revalidatePath("/about");
   revalidatePath("/");
