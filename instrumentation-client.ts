@@ -29,6 +29,13 @@ Sentry.init({
   // Enable sending user PII (Personally Identifiable Information)
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii
   sendDefaultPii: true,
+
+  // Drop noisy/unactionable client errors
+  ignoreErrors: [
+    // Next.js App Router RSC stream abort when users navigate away or
+    // Hostinger's post-deploy health check closes the socket mid-stream.
+    "Connection closed",
+  ],
 });
 
 export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;
