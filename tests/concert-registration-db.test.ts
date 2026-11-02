@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { concert } from "../data/concert";
 import { prisma } from "../lib/prisma";
-import { saveConcertRegistration, takeRegistrationRateLimit } from "../lib/concert-registration-store";
+import { deleteConcertRegistration, saveConcertRegistration, takeRegistrationRateLimit } from "../lib/concert-registration-store";
+import { registrationsCsv } from "../lib/concert-registration";
+import { registrationsXlsx } from "../lib/concert-registration-xlsx";
+import ExcelJS from "exceljs";
 
 test("local PostgreSQL: migration, concurrent duplicates and atomic limiter reset/saturation", { skip: process.env.CONCERT_DATABASE_TEST !== "true" }, async () => {
   assert.equal(new URL(process.env.DATABASE_URL!).hostname, "concert-test.invalid", "Never test against a production database");
@@ -32,6 +35,23 @@ test("local PostgreSQL: migration, concurrent duplicates and atomic limiter rese
   await prisma.concertRegistrationLimit.update({ where: { key: concert.slug }, data: { expiresAt: new Date(Date.now() - 1000) } });
   assert.equal((await takeRegistrationRateLimit()).allowed, true);
   assert.equal((await prisma.concertRegistrationLimit.findUniqueOrThrow({ where: { key: concert.slug } })).attempts, 1);
+  const other = await prisma.concertRegistration.create({ data: { eventSlug: "other-test-event", ...input, consentVersion: "test" } });
+  try {
+    await deleteConcertRegistration(other.id);
+    assert.equal(await prisma.concertRegistration.count({ where: { id: other.id } }), 1, "Never delete another event's row");
+    await deleteConcertRegistration(row.id);
+    await deleteConcertRegistration(row.id);
+    const remaining = await prisma.concertRegistration.findMany({ where: { eventSlug: concert.slug } });
+    assert.equal(remaining.length, 0);
+    assert.ok(!registrationsCsv(remaining).includes(input.email));
+    const workbook = new ExcelJS.Workbook();
+    await workbook.xlsx.load((await registrationsXlsx(remaining)).buffer);
+    assert.equal(workbook.getWorksheet("Registrations")!.rowCount, 1, "Deleted attendee is excluded from Excel");
+    assert.equal(await saveConcertRegistration(input), true);
+    assert.equal(await prisma.concertRegistration.count({ where: { eventSlug: concert.slug, email: input.email } }), 1, "Deleted email can register again");
+  } finally {
+    await prisma.concertRegistration.deleteMany({ where: { id: other.id, eventSlug: "other-test-event" } });
+  }
   await prisma.concertRegistration.deleteMany({ where: { eventSlug: concert.slug } });
   await prisma.concertRegistrationLimit.deleteMany({ where: { key: concert.slug } });
 });

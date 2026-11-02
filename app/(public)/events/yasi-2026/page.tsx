@@ -61,7 +61,7 @@ export default function ConcertPage() {
             <p className="!mb-6 text-lg leading-relaxed text-neutral-600">In celebration of the University of Alabama Million Dollar Band&apos;s performance at Macy&apos;s Parade.</p>
             <dl className="mb-6 space-y-4 text-lg text-neutral-700">
               <div className="flex gap-3"><CalendarDays className="mt-1 h-5 w-5 shrink-0 text-gold-600" aria-hidden="true" /><div><dt className="sr-only">Date</dt><dd>Tuesday, November 24, 2026</dd></div></div>
-              <div className="flex gap-3"><Clock3 className="mt-1 h-5 w-5 shrink-0 text-gold-600" aria-hidden="true" /><div><dt className="sr-only">Time</dt><dd><time dateTime={concert.startsAt}>4:30 PM</time><span className="text-neutral-500"> · New York time</span></dd></div></div>
+              <div className="flex gap-3"><Clock3 className="mt-1 h-5 w-5 shrink-0 text-gold-600" aria-hidden="true" /><div><dt className="sr-only">Time</dt><dd><time dateTime={concert.startsAt}>4:30 PM</time></dd></div></div>
               <div className="flex gap-3"><MapPin className="mt-1 h-5 w-5 shrink-0 text-gold-600" aria-hidden="true" /><div><dt className="sr-only">Venue</dt><dd>Yamaha Artist Services (YASI)<br /><span className="text-neutral-600">689 5th Ave. #3, New York, NY<br />Entrance on 54th St.</span></dd></div></div>
             </dl>
             <div className="mb-7 flex gap-3 rounded border border-gold-200 bg-gold-50 px-4 py-4">
