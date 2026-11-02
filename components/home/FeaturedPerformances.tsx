@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { getFeaturedPerformances, getUpcomingPerformances } from "@/lib/data";
 import { formatDateShort } from "@/lib/utils";
 import { Calendar, MapPin, Music } from "lucide-react";
+import { ConcertRegistrationLink } from "@/components/events/ConcertRegistrationLink";
 
 export async function FeaturedPerformances() {
   const [featured, upcoming] = await Promise.all([
@@ -51,6 +52,7 @@ export async function FeaturedPerformances() {
                   </div>
                 )}
               </div>
+              <ConcertRegistrationLink performance={performance} />
             </Card>
           ))}
         </div>

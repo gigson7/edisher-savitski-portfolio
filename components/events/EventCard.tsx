@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/Card";
 import { formatDateShort } from "@/lib/utils";
 import { Calendar, MapPin, Music, Users } from "lucide-react";
+import { ConcertRegistrationLink } from "@/components/events/ConcertRegistrationLink";
 
 type PerformanceData = {
   id: number;
@@ -72,6 +73,7 @@ export function EventCard({ performance }: EventCardProps) {
           </div>
         )}
       </div>
+      <ConcertRegistrationLink performance={performance} />
     </Card>
   );
 }

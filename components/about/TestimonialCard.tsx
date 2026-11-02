@@ -20,7 +20,7 @@ export function TestimonialCard({ testimonial }: TestimonialCardProps) {
 
       {/* Quote Text */}
       <blockquote className="text-lg text-primary-700 leading-relaxed mb-6 flex-grow italic">
-        "{testimonial.quote}"
+        &quot;{testimonial.quote}&quot;
       </blockquote>
 
       {/* Attribution */}

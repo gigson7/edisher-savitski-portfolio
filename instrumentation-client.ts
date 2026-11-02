@@ -3,6 +3,7 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from "@sentry/nextjs";
+import { dropConcertTelemetry, isConcertPrivate } from "@/lib/concert-telemetry";
 
 Sentry.init({
   dsn: "https://3a9ca8f0b60d3df4f85861dbfe52f29c@o4511183296921600.ingest.us.sentry.io/4511183298428928",
@@ -11,7 +12,19 @@ Sentry.init({
   enabled: process.env.NODE_ENV === "production",
 
   // Add optional integrations for additional features
-  integrations: [Sentry.replayIntegration()],
+  integrations: [Sentry.replayIntegration({
+    maskAllText: true,
+    maskAllInputs: true,
+    block: [".sentry-block", "[data-private]"],
+    networkCaptureBodies: false,
+    networkDetailDenyUrls: [/\/api\/concert-registration/, /\/admin\/registrations/],
+  })],
+  beforeSend: dropConcertTelemetry,
+  beforeSendTransaction: dropConcertTelemetry,
+  beforeBreadcrumb(breadcrumb) {
+    if (isConcertPrivate(window.location.pathname) || isConcertPrivate(breadcrumb.data?.url) || isConcertPrivate(breadcrumb.data?.to)) return null;
+    return breadcrumb;
+  },
 
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,

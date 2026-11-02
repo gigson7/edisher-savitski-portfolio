@@ -131,7 +131,7 @@ export function ContactForm() {
       {submitStatus === "success" && (
         <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-md">
           <p className="font-medium">Thank you for your message!</p>
-          <p className="text-sm mt-1">I'll get back to you soon.</p>
+          <p className="text-sm mt-1">I&apos;ll get back to you soon.</p>
         </div>
       )}
 
