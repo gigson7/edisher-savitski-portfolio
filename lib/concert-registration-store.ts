@@ -2,6 +2,11 @@ import { prisma } from "@/lib/prisma";
 import { concert } from "@/data/concert";
 import type { RegistrationInput } from "@/lib/concert-registration";
 
+export async function deleteConcertRegistration(id: number): Promise<void> {
+  // Scope by both ID and the server-owned event; retries are safe if already deleted.
+  await prisma.concertRegistration.deleteMany({ where: { id, eventSlug: concert.slug } });
+}
+
 export async function takeRegistrationRateLimit() {
   const [bucket] = await prisma.$queryRaw<Array<{ attempts: number; retryAfter: number }>>`
     INSERT INTO concert_registration_limits (key, attempts, expires_at)
