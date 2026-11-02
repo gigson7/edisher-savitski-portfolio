@@ -20,6 +20,9 @@ type RegistrationDependencies = {
 };
 
 const CONTROL_CHARACTERS = /[\p{Cc}\p{Cf}]/u;
+// XLSX stores names in XML 1.0. Reject invalid XML scalars so one malformed name
+// cannot corrupt the complete attendee workbook. The u flag preserves emoji pairs.
+const XML_INVALID_CHARACTERS = /[\uD800-\uDFFF\uFFFE\uFFFF]/u;
 const EMAIL = /^[A-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[A-Z0-9](?:[A-Z0-9-]*[A-Z0-9])?(?:\.[A-Z0-9](?:[A-Z0-9-]*[A-Z0-9])?)+$/i;
 
 function response(status: number, error?: string, extraHeaders?: Record<string, string>) {
@@ -65,7 +68,7 @@ export function parseRegistration(value: unknown): RegistrationInput | null {
   const firstName = (fields.firstName as string).trim();
   const lastName = (fields.lastName as string).trim();
   const email = (fields.email as string).trim().toLowerCase();
-  if ([firstName, lastName].some((s) => !s || s.length > 100 || CONTROL_CHARACTERS.test(s))) return null;
+  if ([firstName, lastName].some((s) => !s || s.length > 100 || CONTROL_CHARACTERS.test(s) || XML_INVALID_CHARACTERS.test(s))) return null;
   if (!email || email.length > 254 || email.split("@")[0].length > 64 || !EMAIL.test(email)) return null;
   const localPart = email.split("@")[0];
   if (localPart.startsWith(".") || localPart.endsWith(".") || localPart.includes("..")) return null;

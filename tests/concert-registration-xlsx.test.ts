@@ -2,6 +2,20 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import ExcelJS from "exceljs";
 import { registrationsXlsx } from "../lib/concert-registration-xlsx";
+import { parseRegistration } from "../lib/concert-registration";
+
+test("accepted registration names always reopen in Excel; XML-invalid scalars are rejected", async () => {
+  const body = { firstName: "ნუცა 😀 & <Guest>", lastName: "O’Neill", email: "guest@example.com", consent: true, website: "" };
+  for (const invalid of ["\uFFFE", "\uFFFF", "\uD800", "\uDC00"]) {
+    assert.equal(parseRegistration({ ...body, firstName: "Guest" + invalid }), null);
+    assert.equal(parseRegistration({ ...body, lastName: "Guest" + invalid }), null);
+  }
+  const accepted = parseRegistration(body);
+  assert.ok(accepted);
+  const book = new ExcelJS.Workbook();
+  await book.xlsx.load((await registrationsXlsx([{ ...accepted, createdAt: new Date("2026-11-02T10:00:00Z") }])).buffer);
+  assert.equal(book.getWorksheet("Registrations")!.getCell("A2").value, body.firstName);
+});
 
 test("Excel export preserves Unicode and typed dates; user values remain literal text without formulas or hyperlinks", async () => {
   const values = ["ნუცა", "=HYPERLINK(\"https://example.com\")", "+1+2", "-1+2", "@SUM(A1)", "  =1+2", "https://example.com"];
