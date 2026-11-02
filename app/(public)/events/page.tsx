@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { EventsList } from "@/components/events/EventsList";
 import { getUpcomingPerformances, getPastPerformances } from "@/lib/data";
+import { ConcertAnnouncement } from "@/components/events/ConcertAnnouncement";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +21,7 @@ export default async function EventsPage() {
 
   return (
     <>
+      <ConcertAnnouncement />
       {/* Header */}
       <Section background="white" className="!pt-20 !pb-8">
         <Container>

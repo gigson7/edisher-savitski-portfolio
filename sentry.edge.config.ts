@@ -4,8 +4,11 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from "@sentry/nextjs";
+import { dropConcertTelemetry } from "@/lib/concert-telemetry";
 
 Sentry.init({
+  beforeSend: dropConcertTelemetry,
+  beforeSendTransaction: dropConcertTelemetry,
   dsn: "https://3a9ca8f0b60d3df4f85861dbfe52f29c@o4511183296921600.ingest.us.sentry.io/4511183298428928",
 
   environment: process.env.NODE_ENV,

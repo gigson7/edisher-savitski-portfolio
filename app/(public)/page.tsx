@@ -4,6 +4,7 @@ import { QuickBio } from "@/components/home/QuickBio";
 import { FeaturedPerformances } from "@/components/home/FeaturedPerformances";
 import { FeaturedMedia } from "@/components/home/FeaturedMedia";
 import { getFeaturedVideos, getPhotos } from "@/lib/data";
+import { ConcertAnnouncement } from "@/components/events/ConcertAnnouncement";
 
 export const dynamic = "force-dynamic";
 
@@ -41,6 +42,7 @@ export default async function Home() {
   return (
     <>
       <HeroSection />
+      <ConcertAnnouncement />
       <QuickBio />
       <FeaturedPerformances />
       <FeaturedMedia videos={featuredVideos} photos={featuredPhotos} />

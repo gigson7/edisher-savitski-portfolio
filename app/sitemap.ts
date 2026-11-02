@@ -22,6 +22,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${siteConfig.url}/events/yasi-2026`,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
       url: `${siteConfig.url}/media`,
       lastModified: new Date(),
       changeFrequency: "monthly",
