@@ -11,16 +11,33 @@ export const dynamic = "force-dynamic";
 // Visible poster bounds within the source JPEG; clip its printed white margins
 // in the layout so the supplied original remains unchanged.
 const posterBounds = { left: 90, top: 87, width: 738, height: 1061 };
+const shareDescription = "November 24, 2026 · 4:30 PM · Yamaha Artist Services, New York. Registration closes November 22.";
+const shareImage = {
+  url: "/images/events/yasi-2026-share.png",
+  width: 1200,
+  height: 630,
+  type: "image/png",
+  alt: "Edisher Savitski Piano Recital — November 24, 2026 at 4:30 PM — Yamaha Artist Services, New York",
+};
 
 export const metadata: Metadata = {
   title: "Piano Recital at Yamaha Artist Services — November 24, 2026",
   description: "Register for Edisher Savitski’s piano recital at Yamaha Artist Services, New York, on November 24, 2026 at 4:30 PM. Entry QR codes will be emailed by Yamaha.",
   alternates: { canonical: concert.path },
   openGraph: {
+    type: "website",
+    locale: "en_US",
+    siteName: "Edisher Savitski",
     title: concert.title,
-    description: "November 24, 2026 · 4:30 PM · Yamaha Artist Services, New York",
+    description: shareDescription,
     url: concert.path,
-    images: [{ url: "/images/events/yasi-2026-poster.jpg", width: 927, height: 1200, alt: "Edisher Savitski Piano Recital at YASI, New York — November 24, 2026" }],
+    images: [shareImage],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: concert.title,
+    description: shareDescription,
+    images: [{ url: shareImage.url, alt: shareImage.alt }],
   },
 };
 
