@@ -92,3 +92,23 @@ backend/database deadline now use end of November22 New York (exclusive
 Eight affected tests, TypeScript, affected lint and diff check pass; read-only local
 PostgreSQL probe verifies the exact new boundary in a non-UTC session. Local dev
 preview remains on3036; no publishing, migration or production mutation performed.
+
+## Production shipping candidate reviews
+
+User subsequently authorized production deployment and runtime registration enablement.
+Codex Extra High reviewed the decision-complete rollout supplement; accepted fixes:
+privately verify host/database/role and concrete last-good deployment restore path
+before mutation; verify anonymous/authenticated private HTML/CSV/XLSX headers before
+activation; require an authorized successful HTTP-save observation before claiming
+production persistence verified. No redesign or repeat pass required.
+
+The final complete-branch Codex High integration review covered committed
+78b2748718838b96ab25f74e004d8b0e20eb33be vs origin/main. One accepted P2: XML-invalid
+Unicode noncharacters could corrupt the XLSX download. Fixed at
+80e81a8ee8abc4cbd2a6215754f266cb734f1f95 with scalar validation and a validation-to-XLSX
+regression preserving Georgian/emoji/XML-escaped text. Twelve affected tests,
+TypeScript and affected lint pass. Full release build and full ESLint previously
+passed on the candidate; final required preview/deployment build will verify exact
+shipping head. Installed Gemini3.5FlashHigh remains unavailable, as recorded above;
+configured Codex model was retained for read-only review fallback. No ordinary
+review loop repeated. GitHub exact-head clearance and live rollout gates remain.

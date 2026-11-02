@@ -40,8 +40,11 @@ preserved; feature worktree is the only source for the release.
    reviews, comments and threads with the live head on every cycle. Fix accepted
    findings narrowly, verify and re-request; no ordinary local-review repeat.
 3. Before production mutation, verify Hostinger's application is edishersavitski.com,
-   linked repository is this repo/main, environment database host matches the read-only
-   target, and no registration flag is already enabled. Do not infer from old notes.
+   linked repository is this repo/main, privately compare environment database host,
+   database name and role with the read-only verified target, and confirm no registration
+   flag is already enabled. Record the last-good Hostinger revision and the observed,
+   usable restore/redeploy mechanism before any migration or auto-deploying merge.
+   Do not infer target or rollback capability from old notes.
 4. Migration is additive: only two new tables/indexes; no existing table/data change,
    no reseed. Existing public/admin system remains compatible before/after it.
    Save secret-free preflight/migration-state/schema metadata locally as recovery
@@ -54,8 +57,10 @@ preserved; feature worktree is the only source for the release.
    inspect migration state and stop on errors instead of retrying blindly.
 6. Squash merge at the gated head. Observe the actual Hostinger automatic deployment,
    build version/commit and public health. Before enablement, new page renders details
-   but POST fails503 with no success claim. Confirm deployment identity, not merely
-   presence of a historical Vercel GitHub status.
+   but POST fails503 with no success claim. While the flag is still false, verify
+   anonymous admin HTML/CSV/XLSX denial, authenticated HTML/CSV/XLSX access and actual
+   private/no-store response headers. Confirm deployment identity, not merely presence
+   of a historical Vercel GitHub status. Any privacy/access failure blocks activation.
 7. Enable CONCERT_REGISTRATION_ENABLED=true in Hostinger's runtime environment and
    apply its documented restart/redeploy mechanism. User explicitly authorized this
    activation. Preserve all unrelated environment keys and never expose their values.
@@ -63,8 +68,12 @@ preserved; feature worktree is the only source for the release.
    Nov22 deadline; live intake rejects invalid body/origin without writes, fresh DB
    metadata confirms readiness, existing admin session can see/download empty/real
    list privately. Existing test-only account is local only; never seed it in prod.
-   Prefer a rolled-back single-row database smoke probe over persistent synthetic
-   attendee data. Do not automatically send collected data or a file to Yamaha.
+   Successful public HTTP storage must be observed through either an explicitly
+   authorized synthetic registration with narrowly authorized cleanup, or an
+   organizer-approved genuine registration. Confirm durable row, duplicate response,
+   admin list and Excel/CSV export. A rolled-back SQL probe or invalid request does
+   not prove this boundary. Until observed, report live successful intake as unverified.
+   Do not automatically send collected data or a file to Yamaha.
 9. Observe health for a bounded interval after activation. If intake/storage fails,
    turn runtime flag false immediately and report the precise failed boundary.
    For broad regression, revert to the verified preceding Hostinger deployment.
