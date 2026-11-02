@@ -33,11 +33,9 @@ export default function ConcertPage() {
         </Link>
         <div className="mx-auto grid max-w-7xl items-start gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-12">
           <div className="w-full max-w-xl justify-self-center lg:sticky lg:top-28 lg:max-w-none">
-            <a href="/images/events/yasi-2026-poster.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open the full concert poster in a new tab" className="block outline-offset-4 focus-visible:outline-2 focus-visible:outline-gold-600">
-              <div className="relative overflow-hidden" style={{ aspectRatio: `${posterBounds.width} / ${posterBounds.height}` }} data-concert-poster>
-                <Image src="/images/events/yasi-2026-poster.jpg" alt="Concert poster: Edisher Savitski Piano Recital, YASI New York, Tuesday November 24, 4:30 PM, in celebration of the University of Alabama Million Dollar Band’s performance at Macy’s Parade." width={927} height={1200} priority sizes="(max-width: 1023px) 125vw, 820px" className="absolute h-auto max-w-none" style={{ width: `${927 / posterBounds.width * 100}%`, left: `${-posterBounds.left / posterBounds.width * 100}%`, top: `${-posterBounds.top / posterBounds.height * 100}%` }} />
-              </div>
-            </a>
+            <div className="relative overflow-hidden" style={{ aspectRatio: `${posterBounds.width} / ${posterBounds.height}` }} data-concert-poster>
+              <Image src="/images/events/yasi-2026-poster.jpg" alt="Concert poster: Edisher Savitski Piano Recital, YASI New York, Tuesday November 24, 4:30 PM, in celebration of the University of Alabama Million Dollar Band’s performance at Macy’s Parade." width={927} height={1200} priority sizes="(max-width: 1023px) 125vw, 820px" className="absolute h-auto max-w-none" style={{ width: `${927 / posterBounds.width * 100}%`, left: `${-posterBounds.left / posterBounds.width * 100}%`, top: `${-posterBounds.top / posterBounds.height * 100}%` }} />
+            </div>
           </div>
           <div className="min-w-0 lg:pt-1">
             <p className="!mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-gold-700">Yamaha Artist Services · New York</p>
