@@ -43,6 +43,8 @@ export default async function EditPerformancePage({ params }: PageProps) {
           location: performance.location,
           country: performance.country,
           organization: performance.organization,
+          linkUrl: performance.linkUrl,
+          linkTitle: performance.linkTitle,
           collaborators,
           repertoire,
           isFeatured: performance.isFeatured,
