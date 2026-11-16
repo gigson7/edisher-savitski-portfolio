@@ -290,9 +290,9 @@ export function PerformanceForm({ performance, action }: Props) {
           </div>
 
           <fieldset className="md:col-span-2 min-w-0 border-t border-neutral-200 pt-4">
-            <legend className="pr-3 text-sm font-medium text-neutral-700">Homepage link (optional)</legend>
+            <legend className="pr-3 text-sm font-medium text-neutral-700">Performance link (optional)</legend>
             <p id="performance-link-help" className="mb-3 text-sm text-neutral-600">
-              Fill in both fields to add a link to this performance’s homepage card. Clear both fields to remove it.
+              Fill in both fields to show a link on this performance’s card on Events and wherever it appears on the homepage. Clear both fields to remove it.
             </p>
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <div>

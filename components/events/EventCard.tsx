@@ -2,8 +2,9 @@ import { Card } from "@/components/ui/Card";
 import { formatDateShort } from "@/lib/utils";
 import { Calendar, MapPin, Music, Users } from "lucide-react";
 import { ConcertRegistrationLink } from "@/components/events/ConcertRegistrationLink";
+import { PerformanceLink } from "./PerformanceLink";
 
-type PerformanceData = {
+export type PerformanceData = {
   id: number;
   title: string;
   date: Date;
@@ -12,6 +13,8 @@ type PerformanceData = {
   location: string;
   country: string;
   organization: string | null;
+  linkUrl?: string | null;
+  linkTitle?: string | null;
   collaborators: unknown;
   repertoire: unknown;
   isFeatured: boolean;
@@ -74,6 +77,7 @@ export function EventCard({ performance }: EventCardProps) {
         )}
       </div>
       <ConcertRegistrationLink performance={performance} />
+      <PerformanceLink linkUrl={performance.linkUrl} linkTitle={performance.linkTitle} />
     </Card>
   );
 }
