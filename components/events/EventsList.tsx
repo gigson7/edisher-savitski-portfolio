@@ -1,23 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { EventCard } from "./EventCard";
+import { EventCard, type PerformanceData } from "./EventCard";
 import { getYear } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
-
-type PerformanceData = {
-  id: number;
-  title: string;
-  date: Date;
-  type: string;
-  venue: string;
-  location: string;
-  country: string;
-  organization: string | null;
-  collaborators: unknown;
-  repertoire: unknown;
-  isFeatured: boolean;
-};
 
 interface EventsListProps {
   performances: PerformanceData[];
