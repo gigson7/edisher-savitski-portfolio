@@ -57,6 +57,8 @@ model Performance {
   location      String          @db.VarChar(300)
   country       String          @db.VarChar(100)
   organization  String?
+  linkUrl       String?         @map("link_url") @db.VarChar(2048)
+  linkTitle     String?         @map("link_title") @db.VarChar(80)
   collaborators Json            @default("[]")
   repertoire    Json            @default("[]")
   isFeatured    Boolean         @default(false) @map("is_featured")

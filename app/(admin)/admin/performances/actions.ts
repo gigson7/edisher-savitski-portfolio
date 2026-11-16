@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { readPerformanceLinkFields } from "@/lib/performance-link";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 export async function deletePerformance(id: number) {
@@ -38,6 +39,8 @@ export async function createPerformance(
   if (!session) {
     return { error: "Unauthorized" };
   }
+  const link = readPerformanceLinkFields(formData);
+  if (link.error) return { error: link.error };
 
   const title = (formData.get("title") as string | null)?.trim() ?? "";
   const dateString = (formData.get("date") as string | null)?.trim() ?? "";
@@ -73,6 +76,7 @@ export async function createPerformance(
       location,
       country,
       organization,
+      ...link.values,
       collaborators,
       repertoire,
       isFeatured,
@@ -95,6 +99,8 @@ export async function updatePerformance(
   if (!session) {
     return { error: "Unauthorized" };
   }
+  const link = readPerformanceLinkFields(formData);
+  if (link.error) return { error: link.error };
 
   const title = (formData.get("title") as string | null)?.trim() ?? "";
   const dateString = (formData.get("date") as string | null)?.trim() ?? "";
@@ -129,6 +135,7 @@ export async function updatePerformance(
       location,
       country,
       organization,
+      ...link.values,
       collaborators,
       repertoire,
       isFeatured,

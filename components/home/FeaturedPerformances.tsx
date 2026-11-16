@@ -5,8 +5,33 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { getFeaturedPerformances, getUpcomingPerformances } from "@/lib/data";
 import { formatDateShort } from "@/lib/utils";
-import { Calendar, MapPin, Music } from "lucide-react";
+import { ArrowUpRight, Calendar, MapPin, Music } from "lucide-react";
 import { ConcertRegistrationLink } from "@/components/events/ConcertRegistrationLink";
+import { validatePerformanceLink } from "@/lib/performance-link";
+
+type FeaturedPerformance = {
+  id: string | number;
+  title: string;
+  date: string | Date;
+  venue: string;
+  location: string;
+  organization?: string | null;
+  linkUrl?: string | null;
+  linkTitle?: string | null;
+};
+
+function PerformanceLink({ linkUrl, linkTitle }: Pick<FeaturedPerformance, "linkUrl" | "linkTitle">) {
+  if (!linkUrl || !linkTitle) return null;
+  const { values } = validatePerformanceLink(linkUrl, linkTitle);
+  if (!values?.linkUrl) return null;
+
+  return (
+    <a href={values.linkUrl} className="mt-5 inline-flex max-w-full items-center gap-2 self-start text-lg font-semibold text-gold-700 underline decoration-gold-300 underline-offset-4 hover:text-gold-900 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-600">
+      <span className="min-w-0 wrap-anywhere">{values.linkTitle}</span>
+      <ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden="true" />
+    </a>
+  );
+}
 
 export async function FeaturedPerformances() {
   const [featured, upcoming] = await Promise.all([
@@ -28,7 +53,7 @@ export async function FeaturedPerformances() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
-          {displayPerformances.map((performance: { id: string | number; title: string; date: string | Date; venue: string; location: string; organization?: string | null }) => (
+          {displayPerformances.map((performance: FeaturedPerformance) => (
             <Card key={performance.id} hover className="flex flex-col h-full">
               <h3 className="text-xl font-semibold text-neutral-900 mb-4">
                 {performance.title}
@@ -53,6 +78,7 @@ export async function FeaturedPerformances() {
                 )}
               </div>
               <ConcertRegistrationLink performance={performance} />
+              <PerformanceLink linkUrl={performance.linkUrl} linkTitle={performance.linkTitle} />
             </Card>
           ))}
         </div>
