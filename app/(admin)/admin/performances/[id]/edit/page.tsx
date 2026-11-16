@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { eventRegistrationEnabled } from "@/lib/event-registration";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { PerformanceForm } from "@/components/admin/PerformanceForm";
@@ -34,6 +36,11 @@ export default async function EditPerformancePage({ params }: PageProps) {
       >
         Edit Performance
       </h1>
+      {eventRegistrationEnabled() && (
+        <Link href={`/admin/registrations/settings/${id}`} className="mb-5 inline-flex min-h-11 items-center rounded-lg border border-gold-300 bg-gold-50 px-4 py-2 font-semibold text-gold-800 hover:bg-gold-100">
+          Registration settings
+        </Link>
+      )}
       <PerformanceForm
         performance={{
           id: performance.id,

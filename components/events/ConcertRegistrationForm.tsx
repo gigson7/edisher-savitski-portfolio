@@ -2,9 +2,17 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Check, ArrowRight, LoaderCircle } from "lucide-react";
-import { concert, registrationIsClosed } from "@/data/concert";
+import { concert } from "@/data/concert";
 
-export function ConcertRegistrationForm({ enabled, initiallyClosed }: { enabled: boolean; initiallyClosed: boolean }) {
+type RegistrationFormProps = {
+  enabled: boolean;
+  initiallyClosed: boolean;
+  event?: { id: number; closesAt: string; deadlineLabel: string };
+};
+
+export function ConcertRegistrationForm({ enabled, initiallyClosed, event }: RegistrationFormProps) {
+  const cutoff = Date.parse(event?.closesAt ?? concert.registrationClosesAt);
+  const endpoint = event ? `/api/concert-registration/${event.id}` : "/api/concert-registration";
   const [closed, setClosed] = useState(initiallyClosed);
   const [status, setStatus] = useState<"idle" | "pending" | "success">("idle");
   const [error, setError] = useState("");
@@ -12,11 +20,11 @@ export function ConcertRegistrationForm({ enabled, initiallyClosed }: { enabled:
   const submitting = useRef(false);
 
   useEffect(() => {
-    const update = () => setClosed(registrationIsClosed());
+    const update = () => setClosed((closed) => closed || Date.now() >= cutoff);
     update();
     const timer = window.setInterval(update, 1000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [cutoff]);
 
   useEffect(() => {
     if (status === "success" || error) messageRef.current?.focus();
@@ -30,7 +38,7 @@ export function ConcertRegistrationForm({ enabled, initiallyClosed }: { enabled:
     setError("");
     const form = new FormData(event.currentTarget);
     try {
-      const result = await fetch("/api/concert-registration", {
+      const result = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -62,13 +70,13 @@ export function ConcertRegistrationForm({ enabled, initiallyClosed }: { enabled:
         <div ref={messageRef} tabIndex={-1} role="status" className="rounded-lg bg-gold-50 p-6 outline-none focus-visible:ring-2 focus-visible:ring-gold-600">
           <Check className="mb-3 h-7 w-7 text-gold-700" aria-hidden="true" />
           <h2 id="registration-heading" className="mb-2 text-3xl">Thank you for registering</h2>
-          <p className="!mb-2 text-lg text-neutral-700">Your details have been saved for this recital.</p>
-          <p className="!mb-0 text-lg text-neutral-700">Yamaha will email your entry QR code. {concert.qrNotice}</p>
+          <p className="!mb-2 text-lg text-neutral-700">Your details have been saved for this {event ? "event" : "recital"}.</p>
+          {!event && <p className="!mb-0 text-lg text-neutral-700">Yamaha will email your entry QR code. {concert.qrNotice}</p>}
         </div>
       ) : closed ? (
         <div role="status">
           <h2 id="registration-heading" className="mb-2 text-3xl">Registration has closed</h2>
-          <p className="!mb-0 text-lg text-neutral-600">Registration ended on November 22, 2026, at 11:59 PM New York time.</p>
+          <p className="!mb-0 text-lg text-neutral-600">{event ? `The registration deadline was ${event.deadlineLabel}.` : "Registration ended on November 22, 2026, at 11:59 PM New York time."}</p>
         </div>
       ) : !enabled ? (
         <div role="status">
@@ -78,8 +86,8 @@ export function ConcertRegistrationForm({ enabled, initiallyClosed }: { enabled:
       ) : (
         <>
           <h2 id="registration-heading" className="mb-1 text-3xl">Register to attend</h2>
-          <p className="!mb-5 text-lg text-neutral-600">Leave your details to receive your entry QR code from Yamaha.</p>
-          <form onSubmit={submit} aria-busy={status === "pending"}>
+          <p className="!mb-5 text-lg text-neutral-600">{event ? "Enter your name and email to register for this event." : "Leave your details to receive your entry QR code from Yamaha."}</p>
+          <form method="post" action={endpoint} onSubmit={submit} aria-busy={status === "pending"}>
             <fieldset disabled={status === "pending"} className="space-y-4">
               <legend className="sr-only">Your registration details — all fields are required</legend>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -91,23 +99,25 @@ export function ConcertRegistrationForm({ enabled, initiallyClosed }: { enabled:
                 </label>
               </div>
               <label className="block text-lg text-neutral-800" htmlFor="concert-email">Email address
-                <input id="concert-email" name="email" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false} required maxLength={254} className={inputClass} aria-describedby="concert-email-help" />
+                <input id="concert-email" name="email" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false} required maxLength={254} className={inputClass} aria-describedby={event ? undefined : "concert-email-help"} />
               </label>
-              <p id="concert-email-help" className="!mb-0 text-base text-neutral-600">Please use the email where you would like to receive your QR code.</p>
+              {!event && <p id="concert-email-help" className="!mb-0 text-base text-neutral-600">Please use the email where you would like to receive your QR code.</p>}
               <div hidden aria-hidden="true">
                 <label htmlFor="concert-website">Leave this field empty</label>
                 <input id="concert-website" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
               </div>
               <label className="flex cursor-pointer items-start gap-3 py-1 text-base leading-relaxed text-neutral-700">
                 <input name="consent" type="checkbox" required className="mt-1.5 h-4 w-4 shrink-0 accent-gold-700" />
-                <span>I agree that my name and email address will be collected and shared with Yamaha solely to arrange admission to this concert.</span>
+                <span>{event
+                  ? "I agree that the event organizers may use my name and email solely to manage registration and admission for this event."
+                  : "I agree that my name and email address will be collected and shared with Yamaha solely to arrange admission to this concert."}</span>
               </label>
               <button type="submit" className="flex min-h-12 w-full items-center justify-center gap-3 rounded bg-gold-700 px-6 py-3 text-lg font-semibold text-white transition hover:bg-gold-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-gold-600 disabled:opacity-60">
-                {status === "pending" ? <><LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" /> Saving your registration…</> : <>Register for the recital <ArrowRight className="h-4 w-4" aria-hidden="true" /></>}
+                {status === "pending" ? <><LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" /> Saving your registration…</> : <>{event ? "Register for the event" : "Register for the recital"} <ArrowRight className="h-4 w-4" aria-hidden="true" /></>}
               </button>
             </fieldset>
             {error && <div ref={messageRef} role="alert" tabIndex={-1} className="mt-4 rounded border border-red-200 bg-red-50 p-4 text-base text-red-800 outline-none">{error}</div>}
-            <p className="!mb-0 mt-3 text-center text-base text-neutral-500">Registration closes November 22 at 11:59 PM, New York time.</p>
+            <p className="!mb-0 mt-3 text-center text-base text-neutral-500">{event ? `Registration closes at the end of ${event.deadlineLabel}.` : "Registration closes November 22 at 11:59 PM, New York time."}</p>
           </form>
         </>
       )}

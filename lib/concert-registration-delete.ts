@@ -3,7 +3,7 @@ import { PRIVATE_HEADERS } from "@/lib/concert-registration";
 type DeleteDependencies = {
   isAuthenticated: () => Promise<boolean>;
   allowedOrigin: string;
-  remove: (id: number) => Promise<void>;
+  remove: (id: number) => Promise<void | boolean>;
 };
 
 function response(status: number, error?: string) {
@@ -20,7 +20,7 @@ export async function handleDeleteConcertRegistration(request: Request, rawId: s
     if (!/^[1-9]\d{0,9}$/.test(rawId) || !Number.isSafeInteger(id) || id > 2147483647) {
       return response(400, "Invalid registration.");
     }
-    await deps.remove(id);
+    if ((await deps.remove(id)) === false) return response(404, "Event not found.");
     return response(200);
   } catch {
     // Database errors may contain attendee data. Keep failures private and generic.

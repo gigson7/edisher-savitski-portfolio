@@ -2,15 +2,15 @@ import { prisma } from "@/lib/prisma";
 import { concert } from "@/data/concert";
 import type { RegistrationInput } from "@/lib/concert-registration";
 
-export async function deleteConcertRegistration(id: number): Promise<void> {
+export async function deleteConcertRegistration(id: number, eventSlug: string = concert.slug): Promise<void> {
   // Scope by both ID and the server-owned event; retries are safe if already deleted.
-  await prisma.concertRegistration.deleteMany({ where: { id, eventSlug: concert.slug } });
+  await prisma.concertRegistration.deleteMany({ where: { id, eventSlug } });
 }
 
-export async function takeRegistrationRateLimit() {
+export async function takeRegistrationRateLimit(key: string = concert.slug) {
   const [bucket] = await prisma.$queryRaw<Array<{ attempts: number; retryAfter: number }>>`
     INSERT INTO concert_registration_limits (key, attempts, expires_at)
-    VALUES (${concert.slug}, 1, CURRENT_TIMESTAMP + INTERVAL '15 minutes')
+    VALUES (${key}, 1, CURRENT_TIMESTAMP + INTERVAL '15 minutes')
     ON CONFLICT (key) DO UPDATE SET
       attempts = CASE WHEN concert_registration_limits.expires_at <= CURRENT_TIMESTAMP
         THEN 1 ELSE LEAST(concert_registration_limits.attempts + 1, 301) END,

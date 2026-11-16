@@ -1,4 +1,4 @@
-const PRIVATE_PATHS = ["/events/yasi-2026", "/api/concert-registration", "/admin/registrations"];
+const PRIVATE_PATHS = ["/events/yasi-2026", "/events/register", "/api/concert-registration", "/admin/registrations"];
 
 export function isConcertPrivate(value: string | undefined): boolean {
   if (!value) return false;

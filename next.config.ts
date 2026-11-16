@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
         },
       ],
     },
-    ...["/", "/events", "/events/yasi-2026", "/api/concert-registration", "/admin/registrations/:path*"].map((source) => ({
+    ...["/", "/events", "/events/yasi-2026", "/events/register/:path*", "/api/concert-registration/:path*", "/admin/registrations/:path*"].map((source) => ({
       source,
       headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }],
     })),

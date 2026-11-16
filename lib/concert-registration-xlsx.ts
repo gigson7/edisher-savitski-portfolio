@@ -1,11 +1,11 @@
 import type { RegistrationInput } from "@/lib/concert-registration";
 
-export async function registrationsXlsx(rows: Array<RegistrationInput & { createdAt: Date }>): Promise<Uint8Array<ArrayBuffer>> {
+export async function registrationsXlsx(rows: Array<RegistrationInput & { createdAt: Date }>, title = "YASI 2026 concert registrations"): Promise<Uint8Array<ArrayBuffer>> {
   // Load the pure-JavaScript writer only for an authenticated Excel download.
   const { default: ExcelJS } = await import("exceljs");
   const workbook = new ExcelJS.Workbook();
   workbook.creator = "Edisher Savitski";
-  workbook.title = "YASI 2026 concert registrations";
+  workbook.title = title;
   const sheet = workbook.addWorksheet("Registrations", {
     views: [{ state: "frozen", ySplit: 1 }],
   });

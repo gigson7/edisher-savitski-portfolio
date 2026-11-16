@@ -13,6 +13,20 @@ export const metadata: Metadata = {
     "View upcoming concerts and past performances by Dr. Edisher Savitski at venues including Carnegie Hall, Wigmore Hall, and Teatro alla Scala.",
 };
 
+type ListedPerformance = Awaited<ReturnType<typeof getUpcomingPerformances>>[number];
+
+function toEventCards(performances: ListedPerformance[]) {
+  return performances.map((performance, index) => ({
+    ...performance,
+    id: typeof performance.id === "number" ? performance.id : -index - 1,
+    date: new Date(performance.date),
+    organization: performance.organization ?? null,
+    collaborators: performance.collaborators ?? [],
+    repertoire: performance.repertoire ?? [],
+    isFeatured: performance.isFeatured ?? false,
+  }));
+}
+
 export default async function EventsPage() {
   const [upcomingPerformances, pastPerformances] = await Promise.all([
     getUpcomingPerformances(),
@@ -41,7 +55,7 @@ export default async function EventsPage() {
         <Section background="gray" className="!pt-12 sm:!pt-14 !pb-20">
           <Container>
             <EventsList
-              performances={upcomingPerformances}
+              performances={toEventCards(upcomingPerformances)}
               title="Upcoming Performances"
             />
           </Container>
@@ -52,7 +66,7 @@ export default async function EventsPage() {
       <Section background={upcomingPerformances.length > 0 ? "white" : "gray"} className={upcomingPerformances.length === 0 ? "!pt-12 sm:!pt-14 !pb-20" : ""}>
         <Container>
           <EventsList
-            performances={pastPerformances}
+            performances={toEventCards(pastPerformances)}
             title="Past Performances"
           />
         </Container>

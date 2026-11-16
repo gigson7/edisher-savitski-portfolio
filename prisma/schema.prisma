@@ -65,6 +65,8 @@ model Performance {
   createdAt     DateTime        @default(now()) @map("created_at")
   updatedAt     DateTime        @updatedAt @map("updated_at")
 
+  registrationForm PerformanceRegistrationForm?
+
   @@index([date])
   @@index([isFeatured])
   @@map("performances")
@@ -135,4 +137,15 @@ model ConcertRegistrationLimit {
   expiresAt DateTime @map("expires_at") @db.Timestamptz(3)
 
   @@map("concert_registration_limits")
+}
+
+model PerformanceRegistrationForm {
+  performanceId Int         @id @map("performance_id")
+  enabled       Boolean     @default(false)
+  closesOn      DateTime    @map("closes_on") @db.Date
+  timeZone      String      @map("time_zone") @db.VarChar(80)
+  closesAt      DateTime    @map("closes_at") @db.Timestamp(3)
+  performance   Performance @relation(fields: [performanceId], references: [id], onDelete: Restrict)
+
+  @@map("performance_registration_forms")
 }
