@@ -14,9 +14,18 @@ export function registrationIsClosed(now = Date.now()): boolean {
   return now >= Date.parse(concert.registrationClosesAt);
 }
 
+export const legacyConcertMatch = {
+  date: "2026-11-24",
+  venue: String.raw`^(yasi|yamaha artist services)(\s*,.*)?$`,
+  location: String.raw`^new york(\s*,.*)?$`,
+} as const;
+
+const concertVenue = new RegExp(legacyConcertMatch.venue, "i");
+const concertLocation = new RegExp(legacyConcertMatch.location, "i");
+
 export function isConcertPerformance(performance: { date: string | Date; venue: string; location: string }): boolean {
   const date = new Date(performance.date);
-  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === "2026-11-24"
-    && /^(yasi|yamaha artist services)(\s*,.*)?$/i.test(performance.venue.trim())
-    && /^new york(?:\s*,.*)?$/i.test(performance.location.trim());
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === legacyConcertMatch.date
+    && concertVenue.test(performance.venue.trim())
+    && concertLocation.test(performance.location.trim());
 }

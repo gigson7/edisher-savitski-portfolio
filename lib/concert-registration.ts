@@ -15,6 +15,7 @@ type RegistrationDependencies = {
   enabled: boolean;
   allowedOrigin: string;
   now?: () => number;
+  closesAt?: string;
   takeRateLimit: () => Promise<{ allowed: boolean; retryAfter: number }>;
   save: (input: RegistrationInput) => Promise<boolean>;
 };
@@ -78,8 +79,12 @@ export function parseRegistration(value: unknown): RegistrationInput | null {
 
 export async function handleConcertRegistration(request: Request, deps: RegistrationDependencies): Promise<Response> {
   const now = deps.now ?? Date.now;
+  const isClosed = () => deps.closesAt === undefined
+    ? registrationIsClosed(now())
+    : now() >= Date.parse(deps.closesAt);
+  const eventLabel = deps.closesAt === undefined ? "recital" : "event";
   if (!deps.enabled) return response(503, "Registration is currently unavailable. Please try again later.");
-  if (registrationIsClosed(now())) return response(410, "Registration for this recital has closed.");
+  if (isClosed()) return response(410, `Registration for this ${eventLabel} has closed.`);
   if (request.headers.get("origin") !== new URL(deps.allowedOrigin).origin) return response(403, "Please submit the form from this website.");
   if (request.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/json") return response(415, "Please use the registration form.");
 
@@ -95,7 +100,7 @@ export async function handleConcertRegistration(request: Request, deps: Registra
   try {
     const limit = await deps.takeRateLimit();
     if (!limit.allowed) return response(429, "Registration is busy. Please try again in a few minutes.", { "Retry-After": String(limit.retryAfter) });
-    if (registrationIsClosed(now()) || !(await deps.save(input))) return response(410, "Registration for this recital has closed.");
+    if (isClosed() || !(await deps.save(input))) return response(410, `Registration for this ${eventLabel} has closed.`);
     // A duplicate receives this same response. Never disclose an attendee's presence.
     return response(200);
   } catch {

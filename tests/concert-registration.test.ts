@@ -86,7 +86,7 @@ test("CSV handles Unicode, quotes, commas, CRLF and formula prefixes after white
 });
 
 test("client, server and edge telemetry filters reject every private route and descendant", () => {
-  for (const path of [concert.path, "/api/concert-registration", "/admin/registrations", "/admin/registrations/export", "/admin/registrations?page=2"]) {
+  for (const path of [concert.path, "/events/register/34", "/api/concert-registration", "/api/concert-registration/34", "/admin/registrations", "/admin/registrations/export", "/admin/registrations?page=2"]) {
     assert.equal(isConcertPrivate(path), true);
     assert.equal(dropConcertTelemetry({ request: { url: origin + path } }), null);
     assert.equal(dropConcertTelemetry({ transaction: "GET " + path }), null);

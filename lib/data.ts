@@ -2,6 +2,18 @@
 import { performances as staticPerformances } from "@/data/performances";
 import { videos as staticVideos, getFeaturedVideos as getStaticFeaturedVideos } from "@/data/videos";
 import { biography as staticBiography } from "@/data/biography";
+import type { Performance as DatabasePerformance } from "@/lib/generated/prisma/client";
+import { eventRegistrationEnabled } from "@/lib/event-registration";
+
+async function withRegistrationLinks(performances: DatabasePerformance[]) {
+  if (!eventRegistrationEnabled() || performances.length === 0) return performances;
+  const { getOpenRegistrationLinks } = await import("@/lib/event-registration-store");
+  const links = await getOpenRegistrationLinks(performances);
+  return performances.map((performance) => ({
+    ...performance,
+    registrationHref: links[performance.id],
+  }));
+}
 
 let prismaFailed = false;
 
@@ -19,10 +31,11 @@ export async function getUpcomingPerformances() {
   try {
     const prisma = getPrisma();
     if (prisma) {
-      return await prisma.performance.findMany({
+      const performances = await prisma.performance.findMany({
         where: { date: { gte: new Date() } },
         orderBy: { date: "asc" },
       });
+      return await withRegistrationLinks(performances);
     }
   } catch (e) {
     console.error("[DATA] DB error in getUpcomingPerformances, using static:", (e as Error).message);
@@ -34,11 +47,12 @@ export async function getPastPerformances(limit?: number) {
   try {
     const prisma = getPrisma();
     if (prisma) {
-      return await prisma.performance.findMany({
+      const performances = await prisma.performance.findMany({
         where: { date: { lt: new Date() } },
         orderBy: { date: "desc" },
         ...(limit ? { take: limit } : {}),
       });
+      return await withRegistrationLinks(performances);
     }
   } catch (e) {
     console.error("[DATA] DB error in getPastPerformances, using static:", (e as Error).message);
@@ -51,10 +65,11 @@ export async function getFeaturedPerformances() {
   try {
     const prisma = getPrisma();
     if (prisma) {
-      return await prisma.performance.findMany({
+      const performances = await prisma.performance.findMany({
         where: { isFeatured: true },
         orderBy: { date: "desc" },
       });
+      return await withRegistrationLinks(performances);
     }
   } catch (e) {
     console.error("[DATA] DB error in getFeaturedPerformances, using static:", (e as Error).message);

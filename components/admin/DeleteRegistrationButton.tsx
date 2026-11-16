@@ -4,7 +4,7 @@ import { useId, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 
-export function DeleteRegistrationButton({ id }: { id: number }) {
+export function DeleteRegistrationButton({ id, eventId }: { id: number; eventId: number | null }) {
   const router = useRouter();
   const messageId = useId();
   const deleteButton = useRef<HTMLButtonElement>(null);
@@ -18,7 +18,8 @@ export function DeleteRegistrationButton({ id }: { id: number }) {
     setPending(true);
     setError("");
     try {
-      const response = await fetch(`/admin/registrations/${id}`, { method: "DELETE", redirect: "error" });
+      const query = eventId === null ? "" : `?event=${eventId}`;
+      const response = await fetch(`/admin/registrations/${id}${query}`, { method: "DELETE", redirect: "error" });
       if (!response.ok) throw new Error("delete-failed");
       setDeleted(true);
       router.refresh();

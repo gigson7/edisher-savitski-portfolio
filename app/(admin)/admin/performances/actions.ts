@@ -5,16 +5,24 @@ import { getSession } from "@/lib/auth";
 import { readPerformanceLinkFields } from "@/lib/performance-link";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-export async function deletePerformance(id: number) {
+export async function deletePerformance(id: number): Promise<string> {
   const session = await getSession();
   if (!session) {
-    throw new Error("Unauthorized");
+    return "Please sign in again.";
   }
 
-  await prisma.performance.delete({ where: { id } });
+  try {
+    await prisma.performance.delete({ where: { id } });
+  } catch (error) {
+    if (typeof error === "object" && error !== null && "code" in error && (error.code === "P2003" || error.code === "23503")) {
+      return "This performance has a registration form. Turn off registration in its settings to stop accepting signups.";
+    }
+    return "This performance could not be deleted. Please try again.";
+  }
   revalidatePath("/admin/performances");
   revalidatePath("/events");
   revalidatePath("/");
+  return "";
 }
 
 type ActionState = { error?: string } | null;
