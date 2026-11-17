@@ -56,7 +56,6 @@ export default async function RegistrationsPage({ searchParams }: { searchParams
       </div>
       <RegistrationEventPicker events={events} selected={selection.id} />
       <p className="text-base text-neutral-600">
-        {selection.id === null && "Download the attendee list to share with Yamaha for entry QR codes. "}
         Only share this list with the event organizers for registration and admission.
       </p>
       {unavailable ? <p role="alert" className="rounded border border-red-200 bg-red-50 p-4 text-base text-red-800">Registrations could not be loaded. Please try again later.</p> : (

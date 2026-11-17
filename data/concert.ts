@@ -6,8 +6,6 @@ export const concert = {
   // Exclusive cutoff: midnight after November 22 in America/New_York.
   registrationClosesAt: "2026-11-23T05:00:00.000Z",
   consentVersion: "yasi-2026-v1",
-  qrNotice:
-    "To enter the venue, guests will receive a QR code via email, on Monday, November 23.",
 } as const;
 
 export function registrationIsClosed(now = Date.now()): boolean {

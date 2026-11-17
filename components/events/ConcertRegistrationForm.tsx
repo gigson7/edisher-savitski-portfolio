@@ -70,8 +70,7 @@ export function ConcertRegistrationForm({ enabled, initiallyClosed, event }: Reg
         <div ref={messageRef} tabIndex={-1} role="status" className="rounded-lg bg-gold-50 p-6 outline-none focus-visible:ring-2 focus-visible:ring-gold-600">
           <Check className="mb-3 h-7 w-7 text-gold-700" aria-hidden="true" />
           <h2 id="registration-heading" className="mb-2 text-3xl">Thank you for registering</h2>
-          <p className="!mb-2 text-lg text-neutral-700">Your details have been saved for this {event ? "event" : "recital"}.</p>
-          {!event && <p className="!mb-0 text-lg text-neutral-700">Yamaha will email your entry QR code. {concert.qrNotice}</p>}
+          <p className="!mb-0 text-lg text-neutral-700">Your details have been saved for this {event ? "event" : "recital"}.</p>
         </div>
       ) : closed ? (
         <div role="status">
@@ -86,7 +85,7 @@ export function ConcertRegistrationForm({ enabled, initiallyClosed, event }: Reg
       ) : (
         <>
           <h2 id="registration-heading" className="mb-1 text-3xl">Register to attend</h2>
-          <p className="!mb-5 text-lg text-neutral-600">{event ? "Enter your name and email to register for this event." : "Leave your details to receive your entry QR code from Yamaha."}</p>
+          <p className="!mb-5 text-lg text-neutral-600">Enter your name and email to register for this {event ? "event" : "recital"}.</p>
           <form method="post" action={endpoint} onSubmit={submit} aria-busy={status === "pending"}>
             <fieldset disabled={status === "pending"} className="space-y-4">
               <legend className="sr-only">Your registration details — all fields are required</legend>
@@ -99,9 +98,8 @@ export function ConcertRegistrationForm({ enabled, initiallyClosed, event }: Reg
                 </label>
               </div>
               <label className="block text-lg text-neutral-800" htmlFor="concert-email">Email address
-                <input id="concert-email" name="email" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false} required maxLength={254} className={inputClass} aria-describedby={event ? undefined : "concert-email-help"} />
+                <input id="concert-email" name="email" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false} required maxLength={254} className={inputClass} />
               </label>
-              {!event && <p id="concert-email-help" className="!mb-0 text-base text-neutral-600">Please use the email where you would like to receive your QR code.</p>}
               <div hidden aria-hidden="true">
                 <label htmlFor="concert-website">Leave this field empty</label>
                 <input id="concert-website" name="website" tabIndex={-1} autoComplete="off" defaultValue="" />
