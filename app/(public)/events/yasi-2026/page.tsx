@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, CalendarDays, Clock3, MapPin, Mail } from "lucide-react";
+import { ArrowLeft, CalendarDays, Clock3, MapPin } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ConcertRegistrationForm } from "@/components/events/ConcertRegistrationForm";
 import { concert, registrationIsClosed } from "@/data/concert";
@@ -22,7 +22,7 @@ const shareImage = {
 
 export const metadata: Metadata = {
   title: "Piano Recital at Yamaha Artist Services — November 24, 2026",
-  description: "Register for Edisher Savitski’s piano recital at Yamaha Artist Services, New York, on November 24, 2026 at 4:30 PM. Entry QR codes will be emailed by Yamaha.",
+  description: "Register for Edisher Savitski’s piano recital at Yamaha Artist Services, New York, on November 24, 2026 at 4:30 PM.",
   alternates: { canonical: concert.path },
   openGraph: {
     type: "website",
@@ -64,10 +64,6 @@ export default function ConcertPage() {
               <div className="flex gap-3"><Clock3 className="mt-1 h-5 w-5 shrink-0 text-gold-600" aria-hidden="true" /><div><dt className="sr-only">Time</dt><dd><time dateTime={concert.startsAt}>4:30 PM</time></dd></div></div>
               <div className="flex gap-3"><MapPin className="mt-1 h-5 w-5 shrink-0 text-gold-600" aria-hidden="true" /><div><dt className="sr-only">Venue</dt><dd>Yamaha Artist Services (YASI)<br /><span className="text-neutral-600">689 5th Ave. #3, New York, NY<br />Entrance on 54th St.</span></dd></div></div>
             </dl>
-            <div className="mb-7 flex gap-3 rounded border border-gold-200 bg-gold-50 px-4 py-4">
-              <Mail className="mt-1 h-5 w-5 shrink-0 text-gold-700" aria-hidden="true" />
-              <div><p className="!mb-1 text-lg leading-relaxed text-neutral-800">{concert.qrNotice}</p><p className="!mb-0 text-base text-neutral-600">QR codes will be sent by Yamaha.</p></div>
-            </div>
             <ConcertRegistrationForm enabled={process.env.CONCERT_REGISTRATION_ENABLED === "true"} initiallyClosed={registrationIsClosed()} />
           </div>
         </div>
